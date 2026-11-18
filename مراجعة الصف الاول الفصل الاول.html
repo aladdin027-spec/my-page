@@ -1,0 +1,2999 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="artifact-type" content="tool">
+<meta name="design-style" content="haven">
+<title>تحدي الرياضيات التفاعلي — الصف الأول الثانوي (الفصل الدراسي الأول)</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Outfit:wght@300..700&family=Hanken+Grotesk:ital,wght@0,400..600;1,400..600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+<style>
+:root {
+  color-scheme: light;
+
+  /* 1. Haven style tokens */
+  --background: #f5f6f5;
+  --surface-container-low: #ffffff;
+  --surface-container: #e3ebe2;
+  --surface-container-high: #dbe2dd;
+
+  --on-surface: #23272a;
+  --on-surface-variant: #5c6468;
+
+  --outline: #c9d0cc;
+  --outline-variant: #dde2df;
+
+  --primary: #3c5a6e;
+  --on-primary: #ffffff;
+  --primary-container: #e2e9ee;
+  --on-primary-container: #2a4152;
+  --secondary: #4f6b53;
+  --tertiary: #5f7c63;
+  --error: #a63d32;
+  --on-error: #ffffff;
+  --error-container: #f8ebe9;
+
+  --data-1: #3c5a6e;
+  --data-2: #5f7c63;
+  --data-3: #a8694a;
+  --data-4: #8a7a68;
+  --data-context: #c3cac6;
+
+  /* 2. RTL Arabic font adaptation */
+  --font-headline: 'IBM Plex Sans Arabic', 'Outfit', sans-serif;
+  --font-body: 'IBM Plex Sans Arabic', 'Hanken Grotesk', sans-serif;
+  --font-label: 'IBM Plex Sans Arabic', 'Outfit', sans-serif;
+
+  --rounded: 0.375rem;
+  --rounded-lg: 0.5rem;
+  --rounded-full: 9999px;
+
+  --hairline: 1px solid var(--outline-variant);
+  --hairline-control: 1px solid var(--outline);
+  --elevation: none;
+
+  /* 3. Shared design foundation tokens */
+  --positive: #366346;
+  --positive-container: #e5f0e8;
+  --warning: #8b5a20;
+  --warning-container: #f5ede2;
+  --focus: var(--primary);
+
+  /* Type scale (Focused Tool) */
+  --display-size: clamp(1.65rem, 1.3rem + 1.1vw, 2.2rem);
+  --headline-size: clamp(1.2rem, 1.05rem + 0.5vw, 1.45rem);
+  --subhead-size: clamp(1.05rem, 0.98rem + 0.25vw, 1.18rem);
+  --body-size: clamp(0.95rem, 0.92rem + 0.15vw, 1.02rem);
+  --label-size: 0.8125rem;
+
+  /* Spacing scale (4pt base) */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+}
+
+/* Base reset */
+*, *::before, *::after { box-sizing: border-box; }
+html, body {
+  overflow-x: clip;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background);
+  color: var(--on-surface);
+  font-family: var(--font-body);
+  font-size: var(--body-size);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+header { position: static !important; }
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.page-grid {
+  display: grid;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.page-grid * { min-width: 0; }
+
+/* Haven defining treatments */
+.headline {
+  font-family: var(--font-headline);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.25;
+  color: var(--on-surface);
+  margin: 0;
+}
+.headline b, .headline strong {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.panel {
+  background: var(--surface-container-low);
+  border: var(--hairline);
+  border-radius: var(--rounded-lg);
+  box-shadow: var(--elevation);
+  padding: var(--space-md) var(--space-lg);
+}
+
+.label {
+  font-family: var(--font-label);
+  font-size: var(--label-size);
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--on-surface-variant);
+}
+
+.caption-sage {
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--secondary);
+  margin-top: var(--space-xs);
+  margin-bottom: 0;
+}
+
+/* Header & Attribution */
+.masthead {
+  display: grid;
+  gap: var(--space-md);
+  padding-bottom: var(--space-lg);
+  border-bottom: var(--hairline);
+}
+.masthead-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+.masthead-title {
+  font-size: var(--display-size);
+}
+.masthead-sub {
+  font-size: var(--subhead-size);
+  max-width: 65ch;
+}
+.author-badge {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm) var(--space-md);
+  background: var(--surface-container);
+  color: var(--secondary);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--rounded);
+  font-size: var(--label-size);
+  font-weight: 600;
+}
+.author-badge i {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* KPI Summary Strip */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.2fr auto;
+  gap: var(--space-md);
+  align-items: stretch;
+}
+.kpi-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+}
+.kpi-value {
+  font-family: var(--font-headline);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  line-height: 1.2;
+}
+.kpi-progress-track {
+  width: 100%;
+  height: 6px;
+  background: var(--surface-container-high);
+  border-radius: var(--rounded-full);
+  overflow: hidden;
+  margin-top: var(--space-xs);
+}
+.kpi-progress-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: var(--rounded-full);
+  transition: width var(--dur-short) var(--ease-out);
+}
+
+/* Main Navigation (Haven Underline Nav) */
+.main-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  border-bottom: var(--hairline);
+  padding-bottom: var(--space-xs);
+}
+.nav-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+.nav-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--on-surface-variant);
+  transition: color var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out);
+  border-radius: var(--rounded) var(--rounded) 0 0;
+}
+.nav-tab:hover {
+  color: var(--on-surface);
+  background: var(--surface-container-high);
+}
+.nav-tab.is-active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+.nav-tab .badge-count {
+  background: var(--surface-container);
+  color: var(--secondary);
+  border-radius: var(--rounded-full);
+  padding: 0 var(--space-sm);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+.nav-tab.is-active .badge-count {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--rounded);
+  font-weight: 600;
+  font-size: var(--body-size);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--on-primary-container);
+}
+.btn-secondary {
+  background: var(--surface-container-low);
+  border: var(--hairline-control);
+  color: var(--on-surface);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: var(--surface-container-high);
+}
+.btn-subtle {
+  background: var(--surface-container);
+  color: var(--secondary);
+}
+.btn-subtle:hover:not(:disabled) {
+  background: var(--surface-container-high);
+}
+.btn-danger-ghost {
+  background: transparent;
+  border: var(--hairline-control);
+  color: var(--error);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--label-size);
+}
+.btn-danger-ghost:hover:not(:disabled) {
+  background: var(--error-container);
+}
+.btn-sm {
+  min-height: 36px;
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--label-size);
+}
+
+/* Tags / Pills */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--surface-container);
+  color: var(--secondary);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--rounded-full);
+  font-size: var(--label-size);
+  font-weight: 600;
+}
+.tag-slate {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.tag-warn {
+  background: var(--warning-container);
+  color: var(--warning);
+}
+
+/* Mathematical Typography (Precision Arabic Superscripts, Fractions & Radicals) */
+.math-expr {
+  display: inline;
+  font-weight: 600;
+  color: var(--on-surface);
+  line-height: 2;
+}
+.math-expr sup, sup.exp {
+  font-size: 0.73em;
+  font-weight: 700;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+  top: -0.48em;
+  margin-inline-start: 1px;
+  margin-inline-end: 2px;
+  color: var(--primary);
+}
+.math-expr sub, sub.idx {
+  font-size: 0.72em;
+  font-weight: 600;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+  bottom: -0.26em;
+  margin-inline-start: 1px;
+}
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  margin: 0.1em 0.25em;
+  line-height: 1.25;
+  font-size: 0.92em;
+}
+.frac .num {
+  padding: 0 0.3em 0.14em;
+  border-bottom: 1.5px solid currentColor;
+  text-align: center;
+  width: 100%;
+}
+.frac .den {
+  padding: 0.14em 0.3em 0;
+  text-align: center;
+}
+.sqrt {
+  display: inline-flex;
+  align-items: stretch;
+  vertical-align: middle;
+  margin: 0 0.18em;
+}
+.sqrt-sign {
+  font-weight: 700;
+  font-size: 1.15em;
+  line-height: 1.05;
+  padding-inline-end: 1px;
+  display: inline-flex;
+  align-items: center;
+}
+.sqrt-body {
+  border-top: 1.5px solid currentColor;
+  padding: 0.08em 0.28em 0 0.2em;
+  line-height: 1.4;
+}
+.overline {
+  display: inline-block;
+  border-top: 1.5px solid currentColor;
+  padding-top: 1px;
+  line-height: 1.2;
+  margin: 0 0.1em;
+}
+
+/* Section Views */
+.view-panel {
+  display: none;
+  gap: var(--space-lg);
+}
+.view-panel.is-visible {
+  display: grid;
+  animation: fadeSlideIn var(--dur-short) var(--ease-out);
+}
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Quiz Setup & Arena Layout */
+.arena-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  gap: var(--space-lg);
+  align-items: start;
+}
+.setup-panel {
+  display: grid;
+  gap: var(--space-md);
+}
+.control-group {
+  display: grid;
+  gap: var(--space-xs);
+}
+.control-label {
+  font-size: var(--label-size);
+  font-weight: 600;
+  color: var(--on-surface-variant);
+}
+.unit-radio-list {
+  display: grid;
+  gap: var(--space-xs);
+}
+.choice-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--surface-container-low);
+  border: var(--hairline-control);
+  border-radius: var(--rounded);
+  cursor: pointer;
+  text-align: right;
+  font-weight: 500;
+  transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out);
+}
+.choice-pill:hover {
+  background: var(--surface-container-high);
+}
+.choice-pill.is-selected {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+/* Active Question Card */
+.question-stage {
+  display: grid;
+  gap: var(--space-md);
+}
+.question-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  border-bottom: var(--hairline);
+}
+.question-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.timer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--rounded-full);
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  font-weight: 700;
+  font-size: var(--label-size);
+}
+.timer-pill.is-urgent {
+  background: var(--error-container);
+  color: var(--error);
+}
+
+.question-body-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-md);
+}
+.question-body-grid.has-diagram {
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 260px);
+  align-items: center;
+}
+.question-text {
+  font-size: 1.12rem;
+  font-weight: 600;
+  line-height: 2;
+  color: var(--on-surface);
+  margin: 0;
+}
+.diagram-box {
+  background: var(--background);
+  border: var(--hairline);
+  border-radius: var(--rounded);
+  padding: var(--space-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 170px;
+}
+.diagram-box svg {
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+}
+
+.lifelines-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+.hint-box {
+  background: var(--warning-container);
+  color: var(--warning);
+  border-radius: var(--rounded);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--body-size);
+  line-height: 1.7;
+}
+
+/* Answer Options */
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+.option-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  min-height: 54px;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--surface-container-low);
+  border: var(--hairline-control);
+  border-radius: var(--rounded);
+  cursor: pointer;
+  text-align: right;
+  font-size: 1.02rem;
+  line-height: 1.9;
+  transition: background-color var(--dur-micro) var(--ease-out), box-shadow var(--dur-micro) var(--ease-out);
+}
+.option-btn:hover:not(:disabled) {
+  background: var(--surface-container-high);
+}
+.option-btn:disabled {
+  cursor: default;
+}
+.option-btn.is-eliminated {
+  opacity: 0.25;
+  text-decoration: line-through;
+}
+.option-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: var(--rounded);
+  background: var(--surface-container);
+  color: var(--secondary);
+  font-weight: 700;
+  font-size: var(--label-size);
+}
+.option-btn.is-correct {
+  background: var(--positive-container);
+  box-shadow: inset 0 0 0 2px var(--positive);
+  color: var(--on-surface);
+}
+.option-btn.is-correct .option-letter {
+  background: var(--positive);
+  color: var(--on-primary);
+}
+.option-btn.is-wrong {
+  background: var(--error-container);
+  box-shadow: inset 0 0 0 2px var(--error);
+  color: var(--on-surface);
+}
+.option-btn.is-wrong .option-letter {
+  background: var(--error);
+  color: var(--on-error);
+}
+
+/* Solution Feedback */
+.solution-panel {
+  border-radius: var(--rounded);
+  padding: var(--space-md);
+  display: grid;
+  gap: var(--space-sm);
+  border: var(--hairline);
+}
+.solution-panel.is-correct {
+  background: var(--positive-container);
+}
+.solution-panel.is-wrong {
+  background: var(--error-container);
+}
+.solution-title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: 0;
+}
+.solution-steps {
+  margin: 0;
+  line-height: 2;
+  color: var(--on-surface);
+}
+.solution-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-top: var(--space-xs);
+}
+
+/* Round Summary Card */
+.summary-card {
+  display: grid;
+  gap: var(--space-lg);
+}
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-md);
+}
+.summary-stat-box {
+  background: var(--background);
+  border: var(--hairline);
+  border-radius: var(--rounded);
+  padding: var(--space-md);
+}
+
+/* Formula Cards Section */
+.filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+.search-field-group {
+  display: grid;
+  gap: var(--space-xs);
+  min-width: 240px;
+}
+.text-input {
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--surface-container-low);
+  border: var(--hairline-control);
+  border-radius: var(--rounded);
+  width: 100%;
+}
+.formula-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: var(--space-lg);
+}
+.formula-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.formula-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+.formula-title {
+  margin: 0;
+  font-size: var(--subhead-size);
+  font-weight: 700;
+  color: var(--on-surface);
+}
+.bookmark-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  background: transparent;
+  border: var(--hairline-control);
+  border-radius: var(--rounded);
+  cursor: pointer;
+  color: var(--on-surface-variant);
+}
+.bookmark-btn.is-saved {
+  background: var(--primary-container);
+  color: var(--primary);
+}
+.formula-box {
+  background: var(--background);
+  border: var(--hairline);
+  border-radius: var(--rounded);
+  padding: var(--space-md);
+  line-height: 2.1;
+  font-size: 1.03rem;
+}
+.formula-details {
+  background: var(--surface-container);
+  border-radius: var(--rounded);
+  padding: var(--space-md);
+  font-size: 0.95rem;
+  line-height: 1.9;
+  display: none;
+}
+.formula-details.is-open {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+/* Interactive Concept Labs */
+.labs-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+.lab-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: var(--space-lg);
+  align-items: start;
+}
+.lab-controls {
+  display: grid;
+  gap: var(--space-md);
+}
+.slider-field {
+  display: grid;
+  gap: var(--space-xs);
+}
+.slider-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+.lab-output-grid {
+  display: grid;
+  gap: var(--space-md);
+}
+.lab-svg-wrap {
+  background: var(--background);
+  border: var(--hairline);
+  border-radius: var(--rounded);
+  padding: var(--space-md);
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lab-svg-wrap svg {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+}
+.sign-line-box {
+  background: var(--surface-container-low);
+  border: var(--hairline);
+  border-radius: var(--rounded);
+  padding: var(--space-md);
+  display: grid;
+  gap: var(--space-sm);
+}
+
+/* Mistakes Bank */
+.mistakes-list {
+  display: grid;
+  gap: var(--space-md);
+}
+.mistake-card {
+  display: grid;
+  gap: var(--space-sm);
+}
+.empty-state {
+  text-align: center;
+  padding: var(--space-xl);
+  display: grid;
+  gap: var(--space-sm);
+  justify-items: center;
+}
+
+/* Footer */
+.page-footer {
+  border-top: var(--hairline);
+  padding-top: var(--space-lg);
+  margin-top: var(--space-md);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+  color: var(--on-surface-variant);
+  font-size: var(--label-size);
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 900px) {
+  .kpi-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .arena-grid, .lab-layout {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .page-grid {
+    padding: var(--space-md);
+    gap: var(--space-md);
+  }
+  .kpi-strip {
+    grid-template-columns: 1fr;
+  }
+  .options-grid {
+    grid-template-columns: 1fr;
+  }
+  .question-body-grid.has-diagram {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="page-grid">
+
+  <!-- Masthead -->
+  <header class="masthead">
+    <div class="masthead-top">
+      <div>
+        <h1 class="headline masthead-title">تحدي <strong>الرياضيات التفاعلي</strong> — الصف الأول الثانوي</h1>
+        <p class="caption-sage masthead-sub">مراجعة رقمية متكاملة لمنهج الفصل الدراسي الأول (الجبر، حساب المثلثات، والهندسة المستوية) وفق الكتاب المدرسي وكتاب المعاصر</p>
+      </div>
+      <div class="author-badge">
+        <i data-lucide="award" aria-hidden="true"></i>
+        <span>إعداد وتصميم: الأستاذ / علاء الدين محمود عوض — معلم خبير الرياضيات — هاتف: ٠١١١٠٠٣١٩٩</span>
+      </div>
+    </div>
+
+    <!-- KPI Progress Strip -->
+    <div class="kpi-strip">
+      <div class="panel kpi-card">
+        <span class="label">النقاط المكتسبة والمستوى</span>
+        <div class="kpi-value" id="kpi-points">٠ نقطة</div>
+        <span class="caption-sage" id="kpi-rank">المستوى: مستكشف الرياضيات</span>
+      </div>
+
+      <div class="panel kpi-card">
+        <span class="label">سلسلة الإجابات الصحيحة</span>
+        <div class="kpi-value" id="kpi-streak">٠ متتالية</div>
+        <span class="caption-sage" id="kpi-best-streak">أعلى سلسلة: ٠</span>
+      </div>
+
+      <div class="panel kpi-card">
+        <span class="label">نسبة إتقان بنك الأسئلة</span>
+        <div class="kpi-value" id="kpi-mastery">٠٪ (٠ من ٣٠)</div>
+        <div class="kpi-progress-track">
+          <div class="kpi-progress-fill" id="kpi-mastery-bar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div class="panel kpi-card" style="justify-content: center; align-items: stretch;">
+        <button type="button" class="btn btn-danger-ghost" id="btn-reset-progress" onclick="handleResetProgress(this)">
+          <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+          <span>إعادة ضبط التقدم</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Navigation -->
+  <nav class="main-nav" aria-label="أقسام المراجعة">
+    <div class="nav-tabs">
+      <button type="button" class="nav-tab is-active" id="tab-arena" onclick="switchView('arena')">
+        <i data-lucide="gamepad-2" aria-hidden="true"></i>
+        <span>ساحة اللعب والتحدي</span>
+      </button>
+      <button type="button" class="nav-tab" id="tab-formulas" onclick="switchView('formulas')">
+        <i data-lucide="book-open-check" aria-hidden="true"></i>
+        <span>ملخص القوانين الشامل</span>
+        <span class="badge-count" id="badge-formulas-count">١٨</span>
+      </button>
+      <button type="button" class="nav-tab" id="tab-labs" onclick="switchView('labs')">
+        <i data-lucide="sliders-horizontal" aria-hidden="true"></i>
+        <span>المختبر التفاعلي</span>
+      </button>
+      <button type="button" class="nav-tab" id="tab-review" onclick="switchView('review')">
+        <i data-lucide="bookmark-check" aria-hidden="true"></i>
+        <span>بنك الأخطاء والمحفوظات</span>
+        <span class="badge-count" id="badge-review-count">٠</span>
+      </button>
+    </div>
+    <span class="label" id="unit-breakdown-label">الجبر ٠٪ • المثلثات ٠٪ • الهندسة ٠٪</span>
+  </nav>
+
+  <!-- VIEW 1: Interactive Quiz Arena -->
+  <section id="view-arena" class="view-panel is-visible" aria-label="ساحة اللعب والتحدي">
+    <div class="arena-grid">
+
+      <!-- Game Setup Sidebar -->
+      <aside class="panel setup-panel">
+        <h2 class="headline" style="font-size: var(--headline-size);">إعداد <strong>الجولة</strong></h2>
+
+        <div class="control-group">
+          <span class="control-label">١. اختر الفرع الدراسي</span>
+          <div class="unit-radio-list" id="unit-selector">
+            <button type="button" class="choice-pill is-selected" data-unit="all" onclick="selectUnit('all')">
+              <span>مراجعة شاملة (كل المنهج)</span>
+              <span class="tag">٣٠ سؤالاً</span>
+            </button>
+            <button type="button" class="choice-pill" data-unit="algebra" onclick="selectUnit('algebra')">
+              <span>الوحدة الأولى: الجبر</span>
+              <span class="tag">١٠ أسئلة</span>
+            </button>
+            <button type="button" class="choice-pill" data-unit="trig" onclick="selectUnit('trig')">
+              <span>الوحدة الثانية: حساب المثلثات</span>
+              <span class="tag">١٠ أسئلة</span>
+            </button>
+            <button type="button" class="choice-pill" data-unit="geo" onclick="selectUnit('geo')">
+              <span>الوحدة الثالثة: الهندسة المستوية</span>
+              <span class="tag">١٠ أسئلة</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <span class="control-label">٢. اختر نمط اللعب</span>
+          <div class="unit-radio-list" id="mode-selector">
+            <button type="button" class="choice-pill is-selected" data-mode="practice" onclick="selectMode('practice')">
+              <span>تدريب موجه (بدون وقت)</span>
+              <span class="label">شرح فوري</span>
+            </button>
+            <button type="button" class="choice-pill" data-mode="timed" onclick="selectMode('timed')">
+              <span>تحدي السرعة (٣٠ ثانية)</span>
+              <span class="label">نقاط مضاعفة</span>
+            </button>
+            <button type="button" class="choice-pill" data-mode="exam" onclick="selectMode('exam')">
+              <span>نموذج امتحان (١٥ سؤالاً)</span>
+              <span class="label">تقييم شامل</span>
+            </button>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="startNewRound()">
+          <i data-lucide="play" aria-hidden="true"></i>
+          <span>ابدأ جولة جديدة</span>
+        </button>
+
+        <div class="hint-box" style="background: var(--surface-container); color: var(--secondary);">
+          <strong>نصيحة المراجعة:</strong> يمكنك استخدام التلميح أو حذف إجابتين في أسئلة المهارات، والضغط على أرقام لوحة المفاتيح (١–٤) للاختيار السريع.
+        </div>
+      </aside>
+
+      <!-- Active Question Stage -->
+      <main id="quiz-stage" class="panel question-stage">
+        <!-- Populated dynamically by JS -->
+      </main>
+
+    </div>
+  </section>
+
+  <!-- VIEW 2: Comprehensive Formula & Theorem Cards -->
+  <section id="view-formulas" class="view-panel" aria-label="ملخص القوانين الشامل">
+    <div class="panel filters-bar">
+      <div class="control-group">
+        <span class="control-label">تصفية القوانين والنظريات حسب الفرع</span>
+        <div class="filter-pills" id="formula-filter-pills">
+          <button type="button" class="btn btn-sm btn-primary" data-ffilter="all" onclick="setFormulaFilter('all')">الكل (١٨)</button>
+          <button type="button" class="btn btn-sm btn-secondary" data-ffilter="algebra" onclick="setFormulaFilter('algebra')">الجبر (٦)</button>
+          <button type="button" class="btn btn-sm btn-secondary" data-ffilter="trig" onclick="setFormulaFilter('trig')">حساب المثلثات (٦)</button>
+          <button type="button" class="btn btn-sm btn-secondary" data-ffilter="geo" onclick="setFormulaFilter('geo')">الهندسة المستوية (٦)</button>
+          <button type="button" class="btn btn-sm btn-subtle" data-ffilter="saved" onclick="setFormulaFilter('saved')">المحفوظة فقط</button>
+        </div>
+      </div>
+
+      <div class="search-field-group">
+        <label class="control-label" for="formula-search">ابحث في القوانين (مثال: المميز، تاليس، قوة)</label>
+        <input type="search" id="formula-search" class="text-input" placeholder="اكتب اسم القانون أو المفهوم..." oninput="renderFormulas()">
+      </div>
+    </div>
+
+    <div class="formula-grid" id="formula-cards-grid">
+      <!-- Populated dynamically by JS -->
+    </div>
+  </section>
+
+  <!-- VIEW 3: Interactive Concept Labs -->
+  <section id="view-labs" class="view-panel" aria-label="المختبر التفاعلي للمفاهيم">
+    <div class="panel" style="display: grid; gap: var(--space-md);">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-md);">
+        <div>
+          <h2 class="headline" style="font-size: var(--headline-size);">المختبر <strong>التفاعلي</strong> لاستكشاف القوانين</h2>
+          <p class="caption-sage">غيّر القيم بالمنزلقات وشاهد تغيّر النتائج الرياضية والرسم الهندسي لحظياً</p>
+        </div>
+        <div class="labs-nav" id="labs-nav">
+          <button type="button" class="btn btn-sm btn-primary" data-lab="quad" onclick="switchLab('quad')">المعادلة التربيعية وإشارة الدالة</button>
+          <button type="button" class="btn btn-sm btn-secondary" data-lab="unitcircle" onclick="switchLab('unitcircle')">دائرة الوحدة والزوايا</button>
+          <button type="button" class="btn btn-sm btn-secondary" data-lab="power" onclick="switchLab('power')">قوة النقطة والمماس</button>
+        </div>
+      </div>
+
+      <!-- Lab 1: Quadratic & Sign of Function -->
+      <div id="lab-quad" class="lab-layout">
+        <div class="lab-controls">
+          <div class="control-group">
+            <span class="control-label">أمثلة سريعة (حالات المميز الثلاث)</span>
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm);">
+              <button type="button" class="btn btn-sm btn-subtle" onclick="setQuadPreset(1, -5, 6)">جذران حقيقيان (س<sup class="exp">٢</sup> − ٥س + ٦)</button>
+              <button type="button" class="btn btn-sm btn-subtle" onclick="setQuadPreset(1, -4, 4)">جذران متساويان (س<sup class="exp">٢</sup> − ٤س + ٤)</button>
+              <button type="button" class="btn btn-sm btn-subtle" onclick="setQuadPreset(1, -2, 5)">جذران مركبان (س<sup class="exp">٢</sup> − ٢س + ٥)</button>
+            </div>
+          </div>
+
+          <div class="slider-field">
+            <label class="slider-head" for="slider-qa">
+              <span>معامل س<sup class="exp">٢</sup> (أ):</span>
+              <span class="tag tag-slate" id="val-qa">١</span>
+            </label>
+            <input type="range" id="slider-qa" min="-4" max="4" step="1" value="1" oninput="updateQuadLab()">
+          </div>
+
+          <div class="slider-field">
+            <label class="slider-head" for="slider-qb">
+              <span>معامل س (ب):</span>
+              <span class="tag tag-slate" id="val-qb">−٥</span>
+            </label>
+            <input type="range" id="slider-qb" min="-8" max="8" step="1" value="-5" oninput="updateQuadLab()">
+          </div>
+
+          <div class="slider-field">
+            <label class="slider-head" for="slider-qc">
+              <span>الحد المطلق (جـ):</span>
+              <span class="tag tag-slate" id="val-qc">٦</span>
+            </label>
+            <input type="range" id="slider-qc" min="-8" max="8" step="1" value="6" oninput="updateQuadLab()">
+          </div>
+
+          <div class="formula-box" id="quad-results">
+            <!-- Live outputs -->
+          </div>
+        </div>
+
+        <div class="lab-output-grid">
+          <div class="lab-svg-wrap" id="quad-svg-container"></div>
+          <div class="sign-line-box" id="quad-sign-line"></div>
+        </div>
+      </div>
+
+      <!-- Lab 2: Unit Circle & Related Angles -->
+      <div id="lab-unitcircle" class="lab-layout" style="display: none;">
+        <div class="lab-controls">
+          <div class="control-group">
+            <span class="control-label">زوايا شهيرة سريعة</span>
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm);">
+              <button type="button" class="btn btn-sm btn-subtle" onclick="setAnglePreset(30)">٣٠°</button>
+              <button type="button" class="btn btn-sm btn-subtle" onclick="setAnglePreset(135)">١٣٥°</button>
+              <button type="button" class="btn btn-sm btn-subtle" onclick="setAnglePreset(240)">٢٤٠°</button>
+              <button type="button" class="btn btn-sm btn-subtle" onclick="setAnglePreset(315)">٣١٥°</button>
+              <button type="button" class="btn btn-sm btn-subtle" onclick="setAnglePreset(-60)">−٦٠°</button>
+            </div>
+          </div>
+
+          <div class="slider-field">
+            <label class="slider-head" for="slider-angle">
+              <span>قياس الزاوية الموجهة (θ):</span>
+              <span class="tag tag-slate" id="val-angle">٣٠°</span>
+            </label>
+            <input type="range" id="slider-angle" min="-360" max="360" step="15" value="30" oninput="updateAngleLab()">
+          </div>
+
+          <div class="formula-box" id="angle-results">
+            <!-- Live outputs -->
+          </div>
+        </div>
+
+        <div class="lab-output-grid">
+          <div class="lab-svg-wrap" id="angle-svg-container"></div>
+        </div>
+      </div>
+
+      <!-- Lab 3: Power of a Point & Circle -->
+      <div id="lab-power" class="lab-layout" style="display: none;">
+        <div class="lab-controls">
+          <div class="control-group">
+            <span class="control-label">حالات النقطة بالنسبة للدائرة</span>
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm);">
+              <button type="button" class="btn btn-sm btn-subtle" onclick="setPowerPreset(5, 13)">خارج الدائرة (ن = ٥، أ م = ١٣)</button>
+              <button type="button" class="btn btn-sm btn-subtle" onclick="setPowerPreset(5, 5)">على الدائرة (ن = ٥، أ م = ٥)</button>
+              <button type="button" class="btn btn-sm btn-subtle" onclick="setPowerPreset(5, 3)">داخل الدائرة (ن = ٥، أ م = ٣)</button>
+            </div>
+          </div>
+
+          <div class="slider-field">
+            <label class="slider-head" for="slider-radius">
+              <span>نصف قطر الدائرة (نق) بالسم:</span>
+              <span class="tag tag-slate" id="val-radius">٥ سم</span>
+            </label>
+            <input type="range" id="slider-radius" min="2" max="8" step="1" value="5" oninput="updatePowerLab()">
+          </div>
+
+          <div class="slider-field">
+            <label class="slider-head" for="slider-dist">
+              <span>البعد عن المركز (أ م) بالسم:</span>
+              <span class="tag tag-slate" id="val-dist">١٣ سم</span>
+            </label>
+            <input type="range" id="slider-dist" min="0" max="15" step="1" value="13" oninput="updatePowerLab()">
+          </div>
+
+          <div class="formula-box" id="power-results">
+            <!-- Live outputs -->
+          </div>
+        </div>
+
+        <div class="lab-output-grid">
+          <div class="lab-svg-wrap" id="power-svg-container"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW 4: Mistakes Bank & Bookmarks -->
+  <section id="view-review" class="view-panel" aria-label="بنك الأخطاء والمحفوظات">
+    <div class="panel" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-md);">
+      <div>
+        <h2 class="headline" style="font-size: var(--headline-size);">بنك <strong>الأخطاء</strong> والمراجعة الخاصة</h2>
+        <p class="caption-sage">الأسئلة التي لم توفق فيها أثناء التحدي تُحفظ هنا تلقائياً لتتمكن من إتقانها</p>
+      </div>
+      <button type="button" class="btn btn-primary" id="btn-retry-mistakes" onclick="startMistakesRound()">
+        <i data-lucide="refresh-cw" aria-hidden="true"></i>
+        <span>تحدي أسئلة الأخطاء الآن</span>
+      </button>
+    </div>
+
+    <div id="mistakes-container" class="mistakes-list">
+      <!-- Populated dynamically -->
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="page-footer">
+    <span>المحتوى العلمي مطابق لمنهج وزارة التربية والتعليم المصرية (الصف الأول الثانوي — الترم الأول)، الكتاب المدرسي وكتاب المعاصر.</span>
+    <span>إعداد وتصميم: الأستاذ / علاء الدين محمود عوض — معلم خبير الرياضيات — هاتف: ٠١١١٠٠٣١٩٩</span>
+  </footer>
+
+</div>
+
+<api-shim></api-shim>
+
+<script>
+// ============================================================
+// 1. Helpers: Eastern Arabic Numerals & Math HTML Formatters
+// ============================================================
+function toAr(val) {
+  const digits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  return String(val).replace(/[0-9]/g, function(d) {
+    return digits[Number(d)];
+  });
+}
+
+function fmtNum(n) {
+  if (n < 0) return `−${toAr(Math.abs(n))}`;
+  return toAr(n);
+}
+
+function frac(num, den) {
+  return `<span class="frac"><span class="num">${num}</span><span class="den">${den}</span></span>`;
+}
+
+function sqrtHtml(val) {
+  return `<span class="sqrt"><span class="sqrt-sign">√</span><span class="sqrt-body">${val}</span></span>`;
+}
+
+function sup(val) {
+  return `<sup class="exp">${val}</sup>`;
+}
+
+function sub(val) {
+  return `<sub class="idx">${val}</sub>`;
+}
+
+function seg(val) {
+  return `<span class="overline">${val}</span>`;
+}
+
+// ============================================================
+// 2. Comprehensive Question Bank (30 Questions: 10 per unit)
+// ============================================================
+const UNIT_NAMES = {
+  algebra: `الجبر`,
+  trig: `حساب المثلثات`,
+  geo: `الهندسة المستوية`
+};
+
+const QUESTIONS = [
+  // -------------------- ALGEBRA (10) --------------------
+  {
+    id: `alg_1`,
+    unit: `algebra`,
+    lesson: `الأعداد المركبة`,
+    level: `أساسي`,
+    question: `أوجد أبسط صورة للمقدار: <span class="math-expr">ت${sup('٤٣')} + ت${sup('٢٢')} + ت${sup('١٦')}</span>`,
+    options: [
+      `<span class="math-expr">−ت</span>`,
+      `<span class="math-expr">ت</span>`,
+      `<span class="math-expr">١ − ت</span>`,
+      `<span class="math-expr">−١ + ت</span>`
+    ],
+    correct: 0,
+    hint: `تذكّر أن <span class="math-expr">ت${sup('٤ن')} = ١</span>، <span class="math-expr">ت${sup('٢')} = −١</span>، <span class="math-expr">ت${sup('٣')} = −ت</span>.`,
+    solution: `نقسم الأسس على ٤: <span class="math-expr">ت${sup('٤٣')} = ت${sup('٤٠ + ٣')} = ت${sup('٣')} = −ت</span>، و <span class="math-expr">ت${sup('٢٢')} = ت${sup('٢٠ + ٢')} = ت${sup('٢')} = −١</span>، و <span class="math-expr">ت${sup('١٦')} = ١</span>. إذن المجموع <span class="math-expr">= −ت − ١ + ١ = −ت</span>.`
+  },
+  {
+    id: `alg_2`,
+    unit: `algebra`,
+    lesson: `مرافق العدد المركب`,
+    level: `أساسي`,
+    question: `إذا كان <span class="math-expr">ع = ${frac('٥', '٢ − ت')}</span>، فأوجد قيمة <span class="math-expr">ع</span> في أبسط صورة.`,
+    options: [
+      `<span class="math-expr">٢ − ت</span>`,
+      `<span class="math-expr">٢ + ت</span>`,
+      `<span class="math-expr">١ + ٢ت</span>`,
+      `<span class="math-expr">٥ + ت</span>`
+    ],
+    correct: 1,
+    hint: `اضرب البسط والمقام في مرافق المقام <span class="math-expr">(٢ + ت)</span>.`,
+    solution: `<span class="math-expr">ع = ${frac('٥(٢ + ت)', '(٢ − ت)(٢ + ت)')} = ${frac('٥(٢ + ت)', '٤ − ت' + sup('٢'))} = ${frac('٥(٢ + ت)', '٤ + ١')} = ${frac('٥(٢ + ت)', '٥')} = ٢ + ت</span>.`
+  },
+  {
+    id: `alg_3`,
+    unit: `algebra`,
+    lesson: `تساوي عددين مركبين`,
+    level: `أساسي`,
+    question: `إذا كان <span class="math-expr">(س + ص) + (س − ص)ت = ٧ + ٣ت</span> حيث <span class="math-expr">س ، ص ∈ ح</span>، فما قيمة <span class="math-expr">س × ص</span>؟`,
+    options: [
+      `<span class="math-expr">١٠</span>`,
+      `<span class="math-expr">١٢</span>`,
+      `<span class="math-expr">٢١</span>`,
+      `<span class="math-expr">٧</span>`
+    ],
+    correct: 0,
+    hint: `ساوِ الجزء الحقيقي بالحقيقي والجزء التخيلي بالتخيلي ثم حل المعادلتين معاً.`,
+    solution: `<span class="math-expr">س + ص = ٧</span> و <span class="math-expr">س − ص = ٣</span>. بجمع المعادلتين: <span class="math-expr">٢س = ١٠ ⇐ س = ٥</span>، وبالتعويض <span class="math-expr">ص = ٢</span>. إذن <span class="math-expr">س × ص = ٥ × ٢ = ١٠</span>.`
+  },
+  {
+    id: `alg_4`,
+    unit: `algebra`,
+    lesson: `قوى الأعداد المركبة`,
+    level: `متميز`,
+    question: `ما قيمة المقدار <span class="math-expr">(١ + ت)${sup('٨')}</span>؟`,
+    options: [
+      `<span class="math-expr">−١٦</span>`,
+      `<span class="math-expr">١٦ت</span>`,
+      `<span class="math-expr">١٦</span>`,
+      `<span class="math-expr">٨ت</span>`
+    ],
+    correct: 2,
+    hint: `احسب أولاً <span class="math-expr">(١ + ت)${sup('٢')}</span> ثم ارفع الناتج للأس ٤.`,
+    solution: `<span class="math-expr">(١ + ت)${sup('٢')} = ١ + ٢ت + ت${sup('٢')} = ٢ت</span>. إذن <span class="math-expr">(١ + ت)${sup('٨')} = [(١ + ت)${sup('٢')}]${sup('٤')} = (٢ت)${sup('٤')} = ١٦ ت${sup('٤')} = ١٦ × ١ = ١٦</span>.`
+  },
+  {
+    id: `alg_5`,
+    unit: `algebra`,
+    lesson: `تحديد نوع الجذرين`,
+    level: `أساسي`,
+    question: `إذا كان جذرا المعادلة <span class="math-expr">س${sup('٢')} − ٦س + ك = ٠</span> حقيقيين متساويين، فما قيمة <span class="math-expr">ك</span>؟`,
+    options: [
+      `<span class="math-expr">٣</span>`,
+      `<span class="math-expr">٦</span>`,
+      `<span class="math-expr">٩</span>`,
+      `<span class="math-expr">−٩</span>`
+    ],
+    correct: 2,
+    hint: `الجذران حقيقيان متساويان عندما يكون المميز <span class="math-expr">ب${sup('٢')} − ٤أجـ = ٠</span>.`,
+    solution: `لدينا <span class="math-expr">أ = ١ ، ب = −٦ ، جـ = ك</span>. المميز <span class="math-expr">= (−٦)${sup('٢')} − ٤(١)(ك) = ٠ ⇐ ٣٦ − ٤ك = ٠ ⇐ ك = ٩</span>.`
+  },
+  {
+    id: `alg_6`,
+    unit: `algebra`,
+    lesson: `تحديد نوع الجذرين`,
+    level: `متميز`,
+    question: `إذا كان جذرا المعادلة <span class="math-expr">س${sup('٢')} + ٤س + م = ٠</span> مركبين غير حقيقيين، فإن <span class="math-expr">م</span> تنتمي إلى:`,
+    options: [
+      `<span class="math-expr">(−∞ ، ٤)</span>`,
+      `<span class="math-expr">[٤ ، ∞)</span>`,
+      `<span class="math-expr">(٤ ، ∞)</span>`,
+      `<span class="math-expr">{٤}</span>`
+    ],
+    correct: 2,
+    hint: `يكون الجذران مركبين غير حقيقيين إذا كان المميز <span class="math-expr">ب${sup('٢')} − ٤أجـ &lt; ٠</span>.`,
+    solution: `<span class="math-expr">(٤)${sup('٢')} − ٤(١)(م) &lt; ٠ ⇐ ١٦ − ٤م &lt; ٠ ⇐ ٤م &gt; ١٦ ⇐ م &gt; ٤</span>، أي أن <span class="math-expr">م ∈ (٤ ، ∞)</span>.`
+  },
+  {
+    id: `alg_7`,
+    unit: `algebra`,
+    lesson: `العلاقة بين الجذرين والمعاملات`,
+    level: `أساسي`,
+    question: `إذا كان أحد جذري المعادلة <span class="math-expr">٣س${sup('٢')} − (ك − ٢)س + (ك + ٥) = ٠</span> معكوساً ضربياً للآخر، فما قيمة <span class="math-expr">ك</span>؟`,
+    options: [
+      `<span class="math-expr">٢</span>`,
+      `<span class="math-expr">−٢</span>`,
+      `<span class="math-expr">٨</span>`,
+      `<span class="math-expr">−٥</span>`
+    ],
+    correct: 1,
+    hint: `إذا كان أحد الجذرين معكوساً ضربياً للآخر فإن حاصل ضربهما <span class="math-expr">= ١</span>، أي أن <span class="math-expr">أ = جـ</span>.`,
+    solution: `نساوي معامل <span class="math-expr">س${sup('٢')}</span> بالحد المطلق: <span class="math-expr">٣ = ك + ٥ ⇐ ك = ٣ − ٥ = −٢</span>.`
+  },
+  {
+    id: `alg_8`,
+    unit: `algebra`,
+    lesson: `العلاقة بين الجذرين والمعاملات`,
+    level: `متميز`,
+    question: `إذا كان <span class="math-expr">ل ، م</span> هما جذرا المعادلة <span class="math-expr">س${sup('٢')} − ٥س + ٣ = ٠</span>، فأوجد قيمة <span class="math-expr">ل${sup('٢')} + م${sup('٢')}</span>.`,
+    options: [
+      `<span class="math-expr">٢٥</span>`,
+      `<span class="math-expr">٢٢</span>`,
+      `<span class="math-expr">١٩</span>`,
+      `<span class="math-expr">٣١</span>`
+    ],
+    correct: 2,
+    hint: `استخدم المتطابقة: <span class="math-expr">ل${sup('٢')} + م${sup('٢')} = (ل + م)${sup('٢')} − ٢ ل م</span>.`,
+    solution: `<span class="math-expr">ل + م = ${frac('−(−٥)', '١')} = ٥</span>، و <span class="math-expr">ل م = ${frac('٣', '١')} = ٣</span>. إذن <span class="math-expr">ل${sup('٢')} + م${sup('٢')} = (٥)${sup('٢')} − ٢(٣) = ٢٥ − ٦ = ١٩</span>.`
+  },
+  {
+    id: `alg_9`,
+    unit: `algebra`,
+    lesson: `تكوين المعادلة التربيعية`,
+    level: `أساسي`,
+    question: `ما المعادلة التربيعية التي جذراها <span class="math-expr">(٢ + ت)</span> و <span class="math-expr">(٢ − ت)</span>؟`,
+    options: [
+      `<span class="math-expr">س${sup('٢')} − ٤س + ٥ = ٠</span>`,
+      `<span class="math-expr">س${sup('٢')} + ٤س + ٥ = ٠</span>`,
+      `<span class="math-expr">س${sup('٢')} − ٤س + ٣ = ٠</span>`,
+      `<span class="math-expr">س${sup('٢')} − ٥س + ٤ = ٠</span>`
+    ],
+    correct: 0,
+    hint: `المعادلة هي <span class="math-expr">س${sup('٢')} − (المجموع)س + (الحاصل) = ٠</span>.`,
+    solution: `مجموع الجذرين <span class="math-expr">= (٢ + ت) + (٢ − ت) = ٤</span>، وحاصل ضربهما <span class="math-expr">= ٤ − ت${sup('٢')} = ٤ + ١ = ٥</span>. فتكون المعادلة: <span class="math-expr">س${sup('٢')} − ٤س + ٥ = ٠</span>.`
+  },
+  {
+    id: `alg_10`,
+    unit: `algebra`,
+    lesson: `متباينات الدرجة الثانية`,
+    level: `أساسي`,
+    question: `أوجد مجموعة حل المتباينة <span class="math-expr">س${sup('٢')} − ٥س + ٦ ≤ ٠</span> في <span class="math-expr">ح</span>.`,
+    options: [
+      `<span class="math-expr">(٢ ، ٣)</span>`,
+      `<span class="math-expr">[٢ ، ٣]</span>`,
+      `<span class="math-expr">ح − (٢ ، ٣)</span>`,
+      `<span class="math-expr">ح − [٢ ، ٣]</span>`
+    ],
+    correct: 1,
+    hint: `حلّل <span class="math-expr">س${sup('٢')} − ٥س + ٦ = ٠</span> لإيجاد الجذرين ثم ادرس الإشارة بينهما وخارجهما.`,
+    solution: `جذرا المعادلة هما <span class="math-expr">س = ٢</span> و <span class="math-expr">س = ٣</span>. بين الجذرين الإشارة عكس معامل <span class="math-expr">س${sup('٢')}</span> (أي سالبة)، وتنعدم عند <span class="math-expr">٢ ، ٣</span>، إذن مجموعة الحل <span class="math-expr">= [٢ ، ٣]</span>.`
+  },
+
+  // -------------------- TRIGONOMETRY (10) --------------------
+  {
+    id: `trig_1`,
+    unit: `trig`,
+    lesson: `الزاوية الموجهة`,
+    level: `أساسي`,
+    question: `الزاوية الموجهة التي قياسها <span class="math-expr">−٥١٠°</span> تقع في الربع:`,
+    options: [
+      `الأول`,
+      `الثاني`,
+      `الثالث`,
+      `الرابع`
+    ],
+    correct: 2,
+    hint: `أضف مضاعفات <span class="math-expr">٣٦٠°</span> حتى تحصل على أصغر قياس موجب مكافئ بين <span class="math-expr">٠°</span> و <span class="math-expr">٣٦٠°</span>.`,
+    solution: `بإضافة <span class="math-expr">٧٢٠°</span> (<span class="math-expr">٢ × ٣٦٠°</span>): <span class="math-expr">−٥١٠° + ٧٢٠° = ٢١٠°</span>. وبما أن <span class="math-expr">١٨٠° &lt; ٢١٠° &lt; ٢٧٠°</span>، فهي تقع في الربع الثالث.`
+  },
+  {
+    id: `trig_2`,
+    unit: `trig`,
+    lesson: `القياس الدائري والستيني`,
+    level: `متميز`,
+    question: `قوس في دائرة طوله <span class="math-expr">٥π</span> سم يقابل زاوية مركزية قياسها <span class="math-expr">٧٥°</span>. أوجد طول نصف قطر الدائرة.`,
+    options: [
+      `<span class="math-expr">٦</span> سم`,
+      `<span class="math-expr">١٠</span> سم`,
+      `<span class="math-expr">١٢</span> سم`,
+      `<span class="math-expr">١٥</span> سم`
+    ],
+    correct: 2,
+    hint: `حوّل <span class="math-expr">٧٥°</span> أولاً إلى القياس الدائري، ثم استخدم <span class="math-expr">نق = ${frac('ل', 'θ' + sup('د'))}</span>.`,
+    solution: `<span class="math-expr">θ${sup('د')} = ٧٥° × ${frac('π', '١٨٠°')} = ${frac('٥π', '١٢')}</span>. ومنها <span class="math-expr">نق = ${frac('٥π', '٥π ÷ ١٢')} = ١٢</span> سم.`
+  },
+  {
+    id: `trig_3`,
+    unit: `trig`,
+    lesson: `التحويل بين القياسين`,
+    level: `أساسي`,
+    question: `الزاوية التي قياسها الدائري <span class="math-expr">${frac('٥π', '٦')}</span> يكون قياسها الستيني مساوياً:`,
+    options: [
+      `<span class="math-expr">١٢٠°</span>`,
+      `<span class="math-expr">١٣٥°</span>`,
+      `<span class="math-expr">١٥٠°</span>`,
+      `<span class="math-expr">٢١٠°</span>`
+    ],
+    correct: 2,
+    hint: `عوض عن <span class="math-expr">π</span> بـ <span class="math-expr">١٨٠°</span> مباشرة عند التحويل للقياس الستيني.`,
+    solution: `القياس الستيني <span class="math-expr">= ${frac('٥ × ١٨٠°', '٦')} = ٥ × ٣٠° = ١٥٠°</span>.`
+  },
+  {
+    id: `trig_4`,
+    unit: `trig`,
+    lesson: `دائرة الوحدة والدوال المثلثية`,
+    level: `أساسي`,
+    question: `إذا كانت النقطة <span class="math-expr">ب(${frac('−٣', '٥')} ، ص)</span> تقع على دائرة الوحدة حيث <span class="math-expr">ص &gt; ٠</span>، فما قيمة <span class="math-expr">ظا θ</span>؟`,
+    options: [
+      `<span class="math-expr">${frac('٤', '٣')}</span>`,
+      `<span class="math-expr">${frac('−٤', '٣')}</span>`,
+      `<span class="math-expr">${frac('−٣', '٤')}</span>`,
+      `<span class="math-expr">${frac('٤', '٥')}</span>`
+    ],
+    correct: 1,
+    hint: `من معادلة دائرة الوحدة <span class="math-expr">س${sup('٢')} + ص${sup('٢')} = ١</span> أوجد <span class="math-expr">ص</span> ثم <span class="math-expr">ظا θ = ${frac('ص', 'س')}</span>.`,
+    solution: `<span class="math-expr">(${frac('−٣', '٥')})${sup('٢')} + ص${sup('٢')} = ١ ⇐ ص${sup('٢')} = ١ − ${frac('٩', '٢٥')} = ${frac('١٦', '٢٥')}</span>. وبما أن <span class="math-expr">ص &gt; ٠</span> فإن <span class="math-expr">ص = ${frac('٤', '٥')}</span>، و <span class="math-expr">ظا θ = ${frac('٤ ÷ ٥', '−٣ ÷ ٥')} = ${frac('−٤', '٣')}</span>.`
+  },
+  {
+    id: `trig_5`,
+    unit: `trig`,
+    lesson: `الزوايا المنتسبة`,
+    level: `متميز`,
+    question: `بسّط المقدار: <span class="math-expr">جا(١٨٠° − θ) × قتا(٩٠° + θ)</span> حيث <span class="math-expr">جتا θ ≠ ٠</span>.`,
+    options: [
+      `<span class="math-expr">١</span>`,
+      `<span class="math-expr">−ظا θ</span>`,
+      `<span class="math-expr">ظا θ</span>`,
+      `<span class="math-expr">ظتا θ</span>`
+    ],
+    correct: 2,
+    hint: `تذكّر أن <span class="math-expr">(١٨٠° − θ)</span> تحافظ على الدالة، و <span class="math-expr">(٩٠° + θ)</span> تقلب التاء وتقع في الربع الثاني.`,
+    solution: `<span class="math-expr">جا(١٨٠° − θ) = جا θ</span> (الجا موجبة في الربع الثاني)، و <span class="math-expr">قتا(٩٠° + θ) = قا θ = ${frac('١', 'جتا θ')}</span> (القتا موجبة في الربع الثاني). إذن الناتج <span class="math-expr">= ${frac('جا θ', 'جتا θ')} = ظا θ</span>.`
+  },
+  {
+    id: `trig_6`,
+    unit: `trig`,
+    lesson: `النسب المثلثية للزوايا المتتامة`,
+    level: `أساسي`,
+    question: `إذا كان <span class="math-expr">جا(٢س + ١٠°) = جتا(س + ٢٠°)</span> حيث <span class="math-expr">س</span> زاوية حادة موجبة، فأوجد قيمة <span class="math-expr">س</span>.`,
+    options: [
+      `<span class="math-expr">١٥°</span>`,
+      `<span class="math-expr">٢٠°</span>`,
+      `<span class="math-expr">٣٠°</span>`,
+      `<span class="math-expr">٢٥°</span>`
+    ],
+    correct: 1,
+    hint: `إذا تساوت <span class="math-expr">جا</span> زاوية مع <span class="math-expr">جتا</span> زاوية أخرى حادتين فإن مجموعهما <span class="math-expr">= ٩٠°</span>.`,
+    solution: `<span class="math-expr">(٢س + ١٠°) + (س + ٢٠°) = ٩٠° ⇐ ٣س + ٣٠° = ٩٠° ⇐ ٣س = ٦٠° ⇐ س = ٢٠°</span>.`
+  },
+  {
+    id: `trig_7`,
+    unit: `trig`,
+    lesson: `الزوايا المنتسبة`,
+    level: `أساسي`,
+    question: `أوجد القيمة العددية للمقدار: <span class="math-expr">جتا(٢٤٠°) + جا(−٣٠°)</span>.`,
+    options: [
+      `<span class="math-expr">٠</span>`,
+      `<span class="math-expr">−${frac('١', '٢')}</span>`,
+      `<span class="math-expr">−١</span>`,
+      `<span class="math-expr">١</span>`
+    ],
+    correct: 2,
+    hint: `اكتب <span class="math-expr">٢٤٠° = ١٨٠° + ٦٠°</span> (ربع ثالث)، وتذكّر أن <span class="math-expr">جا(−θ) = −جا θ</span>.`,
+    solution: `<span class="math-expr">جتا(١٨٠° + ٦٠°) = −جتا ٦٠° = −${frac('١', '٢')}</span>، و <span class="math-expr">جا(−٣٠°) = −جا ٣٠° = −${frac('١', '٢')}</span>. المجموع <span class="math-expr">= −${frac('١', '٢')} − ${frac('١', '٢')} = −١</span>.`
+  },
+  {
+    id: `trig_8`,
+    unit: `trig`,
+    lesson: `التمثيل البياني للدوال المثلثية`,
+    level: `أساسي`,
+    question: `للدالة <span class="math-expr">د(θ) = ٤ جا(٣θ)</span>، ما المدى وما الدورة؟`,
+    options: [
+      `المدى <span class="math-expr">[−٤ ، ٤]</span> والدورة <span class="math-expr">${frac('٢π', '٣')}</span>`,
+      `المدى <span class="math-expr">[−٣ ، ٣]</span> والدورة <span class="math-expr">${frac('π', '٢')}</span>`,
+      `المدى <span class="math-expr">[−٤ ، ٤]</span> والدورة <span class="math-expr">٦π</span>`,
+      `المدى <span class="math-expr">[−١ ، ١]</span> والدورة <span class="math-expr">${frac('٢π', '٣')}</span>`
+    ],
+    correct: 0,
+    hint: `للدالة <span class="math-expr">أ جا(ب θ)</span>: المدى <span class="math-expr">[−|أ| ، |أ|]</span> والدورة <span class="math-expr">= ${frac('٢π', '|ب|')}</span>.`,
+    solution: `السعة <span class="math-expr">|أ| = ٤</span> فيكون المدى <span class="math-expr">[−٤ ، ٤]</span>، ومعامل <span class="math-expr">θ</span> هو <span class="math-expr">ب = ٣</span> فتكون الدورة <span class="math-expr">= ${frac('٢π', '٣')}</span>.`
+  },
+  {
+    id: `trig_9`,
+    unit: `trig`,
+    lesson: `إيجاد الزاوية بمعلومية نسبتها`,
+    level: `أساسي`,
+    question: `إذا كان <span class="math-expr">جا θ = ${frac('−' + sqrtHtml('٣'), '٢')}</span> حيث <span class="math-expr">θ ∈ (١٨٠° ، ٢٧٠°)</span>، فما قياس الزاوية <span class="math-expr">θ</span>؟`,
+    options: [
+      `<span class="math-expr">١٢٠°</span>`,
+      `<span class="math-expr">٢١٠°</span>`,
+      `<span class="math-expr">٢٤٠°</span>`,
+      `<span class="math-expr">٣٠٠°</span>`
+    ],
+    correct: 2,
+    hint: `أوجد الزاوية الحادة التي جيبها <span class="math-expr">${frac(sqrtHtml('٣'), '٢')}</span> ثم انسبها للربع الثالث <span class="math-expr">(١٨٠° + α)</span>.`,
+    solution: `الزاوية الحادة هي <span class="math-expr">٦٠°</span>، وبما أن <span class="math-expr">θ</span> في الربع الثالث فإن <span class="math-expr">θ = ١٨٠° + ٦٠° = ٢٤٠°</span>.`
+  },
+  {
+    id: `trig_10`,
+    unit: `trig`,
+    lesson: `إشارات الدوال المثلثية`,
+    level: `أساسي`,
+    question: `إذا كان <span class="math-expr">ظا θ &lt; ٠</span> و <span class="math-expr">جتا θ &gt; ٠</span>، فإن الزاوية <span class="math-expr">θ</span> تقع في الربع:`,
+    options: [
+      `الأول`,
+      `الثاني`,
+      `الثالث`,
+      `الرابع`
+    ],
+    correct: 3,
+    hint: `حدّد الأرباع التي تكون فيها <span class="math-expr">جتا</span> موجبة والأرباع التي تكون فيها <span class="math-expr">ظا</span> سالبة.`,
+    solution: `<span class="math-expr">جتا θ &gt; ٠</span> في الربعين الأول والرابع، و <span class="math-expr">ظا θ &lt; ٠</span> في الربعين الثاني والرابع؛ إذن التقاطع هو الربع الرابع.`
+  },
+
+  // -------------------- GEOMETRY (10) --------------------
+  {
+    id: `geo_1`,
+    unit: `geo`,
+    lesson: `تشابه المضلعات`,
+    level: `أساسي`,
+    question: `مضلعان متشابهان النسبة بين طولي ضلعين متناظرين فيهما <span class="math-expr">٣ : ٥</span>. إذا كانت مساحة الأصغر <span class="math-expr">٣٦</span> سم${sup('٢')}، فما مساحة الأكبر؟`,
+    options: [
+      `<span class="math-expr">٦٠</span> سم${sup('٢')}`,
+      `<span class="math-expr">٧٥</span> سم${sup('٢')}`,
+      `<span class="math-expr">١٠٠</span> سم${sup('٢')}`,
+      `<span class="math-expr">١٢٥</span> سم${sup('٢')}`
+    ],
+    correct: 2,
+    hint: `النسبة بين مساحتي مضلعين متشابهين تساوي مربع نسبة التشابه.`,
+    solution: `<span class="math-expr">${frac('مساحة الأصغر', 'مساحة الأكبر')} = (${frac('٣', '٥')})${sup('٢')} = ${frac('٩', '٢٥')}</span>. إذن <span class="math-expr">${frac('٣٦', 'مساحة الأكبر')} = ${frac('٩', '٢٥')} ⇐ مساحة الأكبر = ${frac('٣٦ × ٢٥', '٩')} = ١٠٠</span> سم${sup('٢')}.`
+  },
+  {
+    id: `geo_2`,
+    unit: `geo`,
+    lesson: `تشابه المثلثات`,
+    level: `أساسي`,
+    diagram: `parallel_tri`,
+    question: `في الشكل المقابل: <span class="math-expr">${seg('د هـ')} ∥ ${seg('ب جـ')}</span>، فإذا كان <span class="math-expr">أ د = ٤</span> سم، <span class="math-expr">د ب = ٦</span> سم، <span class="math-expr">د هـ = ٦</span> سم، فأوجد طول <span class="math-expr">${seg('ب جـ')}</span>.`,
+    options: [
+      `<span class="math-expr">٩</span> سم`,
+      `<span class="math-expr">١٢</span> سم`,
+      `<span class="math-expr">١٥</span> سم`,
+      `<span class="math-expr">١٨</span> سم`
+    ],
+    correct: 2,
+    hint: `انتبه! <span class="math-expr">△ أ د هـ ∼ △ أ ب جـ</span>، لذا قارن <span class="math-expr">أ د</span> مع الضلع الكامل <span class="math-expr">أ ب = أ د + د ب</span>.`,
+    solution: `<span class="math-expr">أ ب = ٤ + ٦ = ١٠</span> سم. ومن التشابه: <span class="math-expr">${frac('أ د', 'أ ب')} = ${frac('د هـ', 'ب جـ')} ⇐ ${frac('٤', '١٠')} = ${frac('٦', 'ب جـ')} ⇐ ب جـ = ${frac('٦٠', '٤')} = ١٥</span> سم.`
+  },
+  {
+    id: `geo_3`,
+    unit: `geo`,
+    lesson: `إقليدس وتشابه المثلثات`,
+    level: `أساسي`,
+    diagram: `euclid`,
+    question: `في الشكل المقابل: <span class="math-expr">△ أ ب جـ</span> قائم الزاوية في <span class="math-expr">أ</span>، <span class="math-expr">${seg('أ د')} ⊥ ${seg('ب جـ')}</span>، فإذا كان <span class="math-expr">ب د = ٤</span> سم، <span class="math-expr">د جـ = ٩</span> سم، فما طول <span class="math-expr">${seg('أ د')}</span>؟`,
+    options: [
+      `<span class="math-expr">٥</span> سم`,
+      `<span class="math-expr">٦</span> سم`,
+      `<span class="math-expr">٦,٥</span> سم`,
+      `<span class="math-expr">١٣</span> سم`
+    ],
+    correct: 1,
+    hint: `تذكّر نتيجة إقليدس للعمود النازل من رأس القائمة: <span class="math-expr">أ د${sup('٢')} = ب د × د جـ</span>.`,
+    solution: `<span class="math-expr">أ د${sup('٢')} = ٤ × ٩ = ٣٦ ⇐ أ د = ${sqrtHtml('٣٦')} = ٦</span> سم.`
+  },
+  {
+    id: `geo_4`,
+    unit: `geo`,
+    lesson: `نظرية تاليس العامة`,
+    level: `أساسي`,
+    question: `ثلاثة مستقيمات متوازية يقطعها قاطعان؛ طولا الجزأين المحصورين على القاطع الأول <span class="math-expr">٣</span> سم و <span class="math-expr">٥</span> سم، وطول الجزء المناظر للأول على القاطع الثاني <span class="math-expr">٦</span> سم. ما طول الجزء الثاني على القاطع الثاني؟`,
+    options: [
+      `<span class="math-expr">٨</span> سم`,
+      `<span class="math-expr">٩</span> سم`,
+      `<span class="math-expr">١٠</span> سم`,
+      `<span class="math-expr">١٢</span> سم`
+    ],
+    correct: 2,
+    hint: `طبق نظرية تاليس: النسبة بين أجزاء القاطع الأول تساوي النسبة بين أجزاء القاطع الثاني.`,
+    solution: `<span class="math-expr">${frac('٣', '٥')} = ${frac('٦', 'س')} ⇐ س = ${frac('٥ × ٦', '٣')} = ١٠</span> سم.`
+  },
+  {
+    id: `geo_5`,
+    unit: `geo`,
+    lesson: `منصف الزاوية والتناسب`,
+    level: `أساسي`,
+    question: `في <span class="math-expr">△ أ ب جـ</span>، <span class="math-expr">أ ب = ٨</span> سم، <span class="math-expr">أ جـ = ١٢</span> سم، الشعاع <span class="math-expr">أ د</span> ينصّف <span class="math-expr">∠ أ</span> داخلياً ويقطع <span class="math-expr">${seg('ب جـ')}</span> في <span class="math-expr">د</span>. إذا كان <span class="math-expr">ب د = ٤</span> سم، فما طول <span class="math-expr">${seg('ب جـ')}</span> كاملاً؟`,
+    options: [
+      `<span class="math-expr">٦</span> سم`,
+      `<span class="math-expr">٨</span> سم`,
+      `<span class="math-expr">١٠</span> سم`,
+      `<span class="math-expr">١٢</span> سم`
+    ],
+    correct: 2,
+    hint: `احسب <span class="math-expr">د جـ</span> من التناسب <span class="math-expr">${frac('أ ب', 'أ جـ')} = ${frac('ب د', 'د جـ')}</span> ثم اجمعه مع <span class="math-expr">ب د</span>.`,
+    solution: `<span class="math-expr">${frac('٨', '١٢')} = ${frac('٤', 'د جـ')} ⇐ د جـ = ${frac('٤ × ١٢', '٨')} = ٦</span> سم. إذن <span class="math-expr">ب جـ = ب د + د جـ = ٤ + ٦ = ١٠</span> سم.`
+  },
+  {
+    id: `geo_6`,
+    unit: `geo`,
+    lesson: `طول المنصف الداخلي`,
+    level: `متميز`,
+    question: `في مثلث <span class="math-expr">أ ب جـ</span> فيه <span class="math-expr">أ ب = ٨</span> سم، <span class="math-expr">أ جـ = ١٢</span> سم، والمنصف الداخلي <span class="math-expr">${seg('أ د')}</span> يقسم <span class="math-expr">${seg('ب جـ')}</span> إلى <span class="math-expr">ب د = ٤</span> سم، <span class="math-expr">د جـ = ٦</span> سم. أوجد طول المنصف <span class="math-expr">${seg('أ د')}</span>.`,
+    options: [
+      `<span class="math-expr">٦</span> سم`,
+      `<span class="math-expr">٦${sqrtHtml('٢')}</span> سم`,
+      `<span class="math-expr">١٢</span> سم`,
+      `<span class="math-expr">٤${sqrtHtml('٣')}</span> سم`
+    ],
+    correct: 1,
+    hint: `قانون طول المنصف الداخلي: <span class="math-expr">أ د = ${sqrtHtml('أ ب × أ جـ − ب د × د جـ')}</span>.`,
+    solution: `<span class="math-expr">أ د = ${sqrtHtml('٨ × ١٢ − ٤ × ٦')} = ${sqrtHtml('٩٦ − ٢٤')} = ${sqrtHtml('٧٢')} = ٦${sqrtHtml('٢')}</span> سم.`
+  },
+  {
+    id: `geo_7`,
+    unit: `geo`,
+    lesson: `تقاطع وترين داخل دائرة`,
+    level: `أساسي`,
+    diagram: `chords_in`,
+    question: `في الشكل المقابل: تقاطع الوتران <span class="math-expr">${seg('أ ب')}</span> و <span class="math-expr">${seg('جـ د')}</span> داخل الدائرة في <span class="math-expr">هـ</span>. إذا كان <span class="math-expr">أ هـ = ٦</span> سم، <span class="math-expr">هـ ب = ٤</span> سم، <span class="math-expr">جـ هـ = ٣</span> سم، فما طول <span class="math-expr">${seg('هـ د')}</span>؟`,
+    options: [
+      `<span class="math-expr">٦</span> سم`,
+      `<span class="math-expr">٧</span> سم`,
+      `<span class="math-expr">٨</span> سم`,
+      `<span class="math-expr">٩</span> سم`
+    ],
+    correct: 2,
+    hint: `تناسب الأوتار المتقاطعة داخل الدائرة: <span class="math-expr">أ هـ × هـ ب = جـ هـ × هـ د</span>.`,
+    solution: `<span class="math-expr">٦ × ٤ = ٣ × هـ د ⇐ ٢٤ = ٣ × هـ د ⇐ هـ د = ٨</span> سم.`
+  },
+  {
+    id: `geo_8`,
+    unit: `geo`,
+    lesson: `المماس والقاطع للدائرة`,
+    level: `متميز`,
+    diagram: `tangent_secant`,
+    question: `في الشكل المقابل: <span class="math-expr">${seg('هـ أ')}</span> مماس للدائرة، و <span class="math-expr">${seg('هـ جـ')}</span> قاطع لها في <span class="math-expr">ب ، جـ</span>. إذا كان <span class="math-expr">هـ ب = ٤</span> سم، <span class="math-expr">ب جـ = ٥</span> سم، فأوجد طول المماس <span class="math-expr">${seg('هـ أ')}</span>.`,
+    options: [
+      `<span class="math-expr">٢${sqrtHtml('٥')}</span> سم`,
+      `<span class="math-expr">٦</span> سم`,
+      `<span class="math-expr">٩</span> سم`,
+      `<span class="math-expr">٣${sqrtHtml('٢')}</span> سم`
+    ],
+    correct: 1,
+    hint: `احسب أولاً طول القاطع الكامل <span class="math-expr">هـ جـ = هـ ب + ب جـ</span>، ثم طبق <span class="math-expr">هـ أ${sup('٢')} = هـ ب × هـ جـ</span>.`,
+    solution: `<span class="math-expr">هـ جـ = ٤ + ٥ = ٩</span> سم. إذن <span class="math-expr">هـ أ${sup('٢')} = ٤ × ٩ = ٣٦ ⇐ هـ أ = ٦</span> سم.`
+  },
+  {
+    id: `geo_9`,
+    unit: `geo`,
+    lesson: `قوة نقطة بالنسبة لدائرة`,
+    level: `أساسي`,
+    question: `دائرة مركزها <span class="math-expr">م</span> وطول نصف قطرها <span class="math-expr">٥</span> سم، والنقطة <span class="math-expr">أ</span> تبعد عن مركزها مسافة <span class="math-expr">١٣</span> سم. أوجد قوة النقطة <span class="math-expr">أ</span> بالنسبة للدائرة <span class="math-expr">م</span>.`,
+    options: [
+      `<span class="math-expr">١٢</span>`,
+      `<span class="math-expr">٦٤</span>`,
+      `<span class="math-expr">١٤٤</span>`,
+      `<span class="math-expr">١٩٤</span>`
+    ],
+    correct: 2,
+    hint: `قانون قوة النقطة: <span class="math-expr">ق${sub('م')}(أ) = (أ م)${sup('٢')} − نق${sup('٢')}</span>.`,
+    solution: `<span class="math-expr">ق${sub('م')}(أ) = ١٣${sup('٢')} − ٥${sup('٢')} = ١٦٩ − ٢٥ = ١٤٤</span>.`
+  },
+  {
+    id: `geo_10`,
+    unit: `geo`,
+    lesson: `المنصفان الداخلي والخارجي`,
+    level: `أساسي`,
+    question: `في أي مثلث، ما قياس الزاوية المحصورة بين المنصف الداخلي والمنصف الخارجي لنفس زاوية الرأس؟`,
+    options: [
+      `<span class="math-expr">٤٥°</span>`,
+      `<span class="math-expr">٦٠°</span>`,
+      `<span class="math-expr">٩٠°</span>`,
+      `<span class="math-expr">١٨٠°</span>`
+    ],
+    correct: 2,
+    hint: `مجموع الزاوية الداخلة والمجاورة الخارجة <span class="math-expr">= ١٨٠°</span>، والمنصفان يأخذان نصف كل منهما.`,
+    solution: `المنصف الداخلي والمنصف الخارجي لأي زاوية رأس في مثلث متعامدان دائماً، فالزاوية بينهما <span class="math-expr">= ٩٠°</span>.`
+  }
+];
+
+// ============================================================
+// 3. Formula & Theorem Cards (18 Comprehensive Cards)
+// ============================================================
+const FORMULAS = [
+  // Algebra (6)
+  {
+    id: `f_alg_1`,
+    unit: `algebra`,
+    title: `قوى العدد التخيلي (ت) ومرافقه`,
+    formula: `<span class="math-expr">ت = ${sqrtHtml('−١')} ، ت${sup('٢')} = −١ ، ت${sup('٣')} = −ت ، ت${sup('٤ن')} = ١</span><br>مرافق <span class="math-expr">(أ + ب ت)</span> هو <span class="math-expr">(أ − ب ت)</span>، وحاصل ضربهما <span class="math-expr">= أ${sup('٢')} + ب${sup('٢')}</span>`,
+    example: `<strong>مثال:</strong> <span class="math-expr">(١ + ت)${sup('٢')} = ٢ت</span>، و <span class="math-expr">(١ − ت)${sup('٢')} = −٢ت</span>. وإذا كان المقام <span class="math-expr">(٢ − ت)</span> نضرب في <span class="math-expr">(٢ + ت)</span> لنحصل على مقام حقيقي <span class="math-expr">٢${sup('٢')} + ١${sup('٢')} = ٥</span>.`,
+    tip: `خلي بالك: مرافق العدد التخيلي البحت <span class="math-expr">٥ت</span> هو <span class="math-expr">−٥ت</span>، ومرافق العدد الحقيقي <span class="math-expr">٧</span> هو نفسه <span class="math-expr">٧</span>.`
+  },
+  {
+    id: `f_alg_2`,
+    unit: `algebra`,
+    title: `المميز ونوع جذري المعادلة التربيعية`,
+    formula: `للمعادلة <span class="math-expr">أ س${sup('٢')} + ب س + جـ = ٠</span>، المميز <span class="math-expr">Δ = ب${sup('٢')} − ٤ أ جـ</span><br>• <span class="math-expr">Δ &gt; ٠</span>: جذران حقيقيان مختلفان<br>• <span class="math-expr">Δ = ٠</span>: جذران حقيقيان متساويان<br>• <span class="math-expr">Δ &lt; ٠</span>: جذران مركبان غير حقيقيين`,
+    example: `<strong>مثال:</strong> حدد نوع جذري <span class="math-expr">٢س${sup('٢')} − ٣س + ٥ = ٠</span>:<br><span class="math-expr">Δ = (−٣)${sup('٢')} − ٤(٢)(٥) = ٩ − ٤٠ = −٣١ &lt; ٠</span> ⇐ الجذران مركبان غير حقيقيين.`,
+    tip: `خلي بالك: عبارة "الجذران حقيقيان" بدون تحديد تعني <span class="math-expr">Δ ≥ ٠</span> (مختلفان أو متساويان).`
+  },
+  {
+    id: `f_alg_3`,
+    unit: `algebra`,
+    title: `العلاقة بين الجذرين والمعاملات`,
+    formula: `إذا كان الجذران هما <span class="math-expr">ل ، م</span>:<br>• مجموع الجذرين: <span class="math-expr">ل + م = ${frac('−ب', 'أ')}</span><br>• حاصل ضرب الجذرين: <span class="math-expr">ل م = ${frac('جـ', 'أ')}</span>`,
+    example: `<strong>حالات خاصة شهيرة:</strong><br>• أحد الجذرين معكوس جمعي للآخر <span class="math-expr">⇐ ب = ٠</span><br>• أحد الجذرين معكوس ضربي للآخر <span class="math-expr">⇐ أ = جـ</span>`,
+    tip: `خلي بالك: تأكد دائماً أن المعادلة في الصورة الصفرية <span class="math-expr">أ س${sup('٢')} + ب س + جـ = ٠</span> قبل استخراج <span class="math-expr">أ ، ب ، جـ</span>.`
+  },
+  {
+    id: `f_alg_4`,
+    unit: `algebra`,
+    title: `المتطابقات الجبرية للجذرين وتكوين المعادلة`,
+    formula: `• <span class="math-expr">ل${sup('٢')} + م${sup('٢')} = (ل + م)${sup('٢')} − ٢ ل م</span><br>• <span class="math-expr">(ل − م)${sup('٢')} = (ل + م)${sup('٢')} − ٤ ل م</span><br>• تكوين المعادلة: <span class="math-expr">س${sup('٢')} − (المجموع)س + (الحاصل) = ٠</span>`,
+    example: `<strong>مثال:</strong> إذا كان <span class="math-expr">ل + م = ٦ ، ل م = ٤</span>، فإن <span class="math-expr">${frac('١', 'ل')} + ${frac('١', 'م')} = ${frac('ل + م', 'ل م')} = ${frac('٦', '٤')} = ${frac('٣', '٢')}</span>.`,
+    tip: `تذكّر: <span class="math-expr">ل${sup('٣')} + م${sup('٣')} = (ل + م)[(ل + م)${sup('٢')} − ٣ ل م]</span>.`
+  },
+  {
+    id: `f_alg_5`,
+    unit: `algebra`,
+    title: `إشارة الدالة (الثابتة والخطية والتربيعية)`,
+    formula: `• الخطية <span class="math-expr">ب س + جـ</span>: يمين الجذر مثل إشارة <span class="math-expr">ب</span>، ويساره عكسها.<br>• التربيعية (<span class="math-expr">Δ &gt; ٠</span> بجذرين <span class="math-expr">ل &lt; م</span>): بين الجذرين <span class="math-expr">(ل ، م)</span> عكس إشارة <span class="math-expr">أ</span>، وخارجهما <span class="math-expr">ح − [ل ، م]</span> مثل إشارة <span class="math-expr">أ</span>.`,
+    example: `<strong>مثال:</strong> للدالة <span class="math-expr">د(س) = س${sup('٢')} − ٩</span>: الجذران <span class="math-expr">−٣ ، ٣</span>؛ إذن سالبة في <span class="math-expr">(−٣ ، ٣)</span>، وموجبة في <span class="math-expr">ح − [−٣ ، ٣]</span>.`,
+    tip: `إذا كان المميز <span class="math-expr">Δ &lt; ٠</span> (لا توجد جذور حقيقية)، فإشارة الدالة التربيعية دائماً مثل إشارة <span class="math-expr">أ</span> لكل <span class="math-expr">س ∈ ح</span>.`
+  },
+  {
+    id: `f_alg_6`,
+    unit: `algebra`,
+    title: `حل متباينات الدرجة الثانية`,
+    formula: `نضع المتباينة في الصورة الصفرية، نبحث إشارة الدالة على خط الأعداد، ثم نختار الفترات المحققة لعلامة التباين (<span class="math-expr">&gt; ، &lt; ، ≥ ، ≤</span>).`,
+    example: `<strong>مثال:</strong> حل <span class="math-expr">س${sup('٢')} &gt; ٤</span> ⇐ <span class="math-expr">س${sup('٢')} − ٤ &gt; ٠</span>. الجذران <span class="math-expr">−٢ ، ٢</span>، وموجبة خارج الجذرين، إذن م.ح <span class="math-expr">= ح − [−٢ ، ٢]</span>.`,
+    tip: `وجود علامة التساوي (<span class="math-expr">≤</span> أو <span class="math-expr">≥</span>) يعني إغلاق الفترات عند الجذور، وعدم وجودها يعني فتح الفترات.`
+  },
+
+  // Trigonometry (6)
+  {
+    id: `f_trig_1`,
+    unit: `trig`,
+    title: `الزاوية الموجهة والزوايا المتكافئة`,
+    formula: `الزوايا المتكافئة تشترك في نفس الضلع النهائي بالوضع القياسي:<br><span class="math-expr">θ${sub('مكافئة')} = θ ± ٣٦٠° ن</span>  (حيث <span class="math-expr">ن ∈ ص</span>)`,
+    example: `<strong>مثال:</strong> لإيجاد الربع الذي تقع فيه <span class="math-expr">٨٥٠°</span>: نطرح <span class="math-expr">٧٢٠°</span> فنجد <span class="math-expr">١٣٠°</span> (تقع في الربع الثاني).`,
+    tip: `الزوايا <span class="math-expr">٠° ، ٩٠° ، ١٨٠° ، ٢٧٠° ، ٣٦٠°</span> زوايا ربعية لا تقع في أي ربع.`
+  },
+  {
+    id: `f_trig_2`,
+    unit: `trig`,
+    title: `القياس الستيني والدائري وطول القوس`,
+    formula: `<span class="math-expr">θ${sup('د')} = ${frac('ل', 'نق')}</span>  ،  <span class="math-expr">${frac('س°', '١٨٠°')} = ${frac('θ' + sup('د'), 'π')}</span><br><span class="math-expr">ل = θ${sup('د')} × نق</span>  ،  <span class="math-expr">١${sup('د')} ≈ ٥٧° ١٧' ٤٥''</span>`,
+    example: `<strong>مثال:</strong> زاوية مركزية قياسها <span class="math-expr">١٢٠°</span> في دائرة نصف قطرها <span class="math-expr">٦</span> سم: <span class="math-expr">θ${sup('د')} = ${frac('٢π', '٣')}</span>، إذن <span class="math-expr">ل = ${frac('٢π', '٣')} × ٦ = ٤π</span> سم.`,
+    tip: `تأكد دائماً من تحويل الزاوية إلى القياس الدائري قبل استخدام القانون <span class="math-expr">ل = θ${sup('د')} × نق</span>.`
+  },
+  {
+    id: `f_trig_3`,
+    unit: `trig`,
+    title: `دائرة الوحدة وإشارات الدوال المثلثية`,
+    formula: `نقطة على دائرة الوحدة <span class="math-expr">(س ، ص) = (جتا θ ، جا θ)</span>، و <span class="math-expr">جا${sup('٢')}θ + جتا${sup('٢')}θ = ١</span><br>• الربع ١: الكل موجب • الربع ٢: <span class="math-expr">جا ، قتا</span><br>• الربع ٣: <span class="math-expr">ظا ، ظتا</span> • الربع ٤: <span class="math-expr">جتا ، قا</span>`,
+    example: `<strong>مثال:</strong> <span class="math-expr">قتا θ = ${frac('١', 'جا θ')}</span>، <span class="math-expr">قا θ = ${frac('١', 'جتا θ')}</span>، <span class="math-expr">ظتا θ = ${frac('جتا θ', 'جا θ')}</span>.`,
+    tip: `إشارة المقلوب مطابقة تماماً لإشارة الدالة الأصلية في كل ربع.`
+  },
+  {
+    id: `f_trig_4`,
+    unit: `trig`,
+    title: `قواعد الزوايا المنتسبة`,
+    formula: `• <span class="math-expr">(١٨٠° ± θ)</span> و <span class="math-expr">(٣٦٠° ± θ)</span> و <span class="math-expr">(−θ)</span>: تحافظ على اسم الدالة.<br>• <span class="math-expr">(٩٠° ± θ)</span> و <span class="math-expr">(٢٧٠° ± θ)</span>: تبدّل التاء (<span class="math-expr">جا ↔ جتا</span> ، <span class="math-expr">ظا ↔ ظتا</span> ، <span class="math-expr">قا ↔ قتا</span>).`,
+    example: `<strong>مثال:</strong> <span class="math-expr">جتا(٢٧٠° − θ) = −جا θ</span> (الربع الثالث والجتا فيه سالبة، والـ ٢٧٠° تبدّل التاء).`,
+    tip: `نحدد الإشارة دائماً بناءً على الدالة الأصلية قبل التبديل والربع الذي تقع فيه الزاوية المركبة (بافتراض <span class="math-expr">θ</span> حادة).`
+  },
+  {
+    id: `f_trig_5`,
+    unit: `trig`,
+    title: `الزوايا المتتامة في المعادلات المثلثية`,
+    formula: `لزاويتين حادتين موجبتين <span class="math-expr">α ، β</span>:<br>إذا كان <span class="math-expr">جا α = جتا β</span> أو <span class="math-expr">ظا α = ظتا β</span> أو <span class="math-expr">قا α = قتا β</span><br>فإن: <span class="math-expr">α + β = ٩٠°</span>`,
+    example: `<strong>مثال:</strong> إذا كان <span class="math-expr">ظا ٢س = ظتا ٣س</span> (<span class="math-expr">س</span> حادة): <span class="math-expr">٥س = ٩٠° ⇐ س = ١٨°</span>.`,
+    tip: `للمعادلة العامة: <span class="math-expr">α ± β = ٩٠° + ٣٦٠° ن</span> في الجا والجتا، و <span class="math-expr">α + β = ٩٠° + ١٨٠° ن</span> في الظا والظتا.`
+  },
+  {
+    id: `f_trig_6`,
+    unit: `trig`,
+    title: `التمثيل البياني لدالتي الجيب وجيب التمام`,
+    formula: `للدالة <span class="math-expr">د(θ) = أ جا(ب θ)</span> أو <span class="math-expr">أ جتا(ب θ)</span>:<br>• القيمة العظمى <span class="math-expr">= |أ|</span> ، الصغرى <span class="math-expr">= −|أ|</span><br>• المدى <span class="math-expr">= [−|أ| ، |أ|]</span> • الدورة <span class="math-expr">= ${frac('٢π', '|ب|')}</span>`,
+    example: `<strong>مثال:</strong> <span class="math-expr">د(θ) = −٣ جتا(٢θ)</span>: المدى <span class="math-expr">[−٣ ، ٣]</span>، والدورة <span class="math-expr">= ${frac('٢π', '٢')} = π</span>.`,
+    tip: `انتبه: السعة والمدى دائماً موجبان باستخدام القيمة المطلقة <span class="math-expr">|أ|</span> حتى لو كان معامل الدالة سالباً.`
+  },
+
+  // Geometry (6)
+  {
+    id: `f_geo_1`,
+    unit: `geo`,
+    title: `تشابه المضلعات (المحيط والمساحة)`,
+    formula: `إذا كان المضلع <span class="math-expr">م${sub('١')} ∼ م${sub('٢')}</span> بمعامل تشابه <span class="math-expr">ك</span>:<br>• <span class="math-expr">${frac('محيط م' + sub('١'), 'محيط م' + sub('٢'))} = ك</span><br>• <span class="math-expr">${frac('مساحة م' + sub('١'), 'مساحة م' + sub('٢'))} = ك${sup('٢')}</span>`,
+    example: `<strong>مثال:</strong> إذا كانت النسبة بين محيطي مثلثين متشابهين <span class="math-expr">٢ : ٧</span>، فإن النسبة بين مساحتيهما <span class="math-expr">= ٤ : ٤٩</span>.`,
+    tip: `كل المضلعات المنتظمة التي لها نفس العدد من الأضلاع متشابهة دائماً (مثل المربعات والمثلثات المتساوية الأضلاع).`
+  },
+  {
+    id: `f_geo_2`,
+    unit: `geo`,
+    title: `حالات تشابه المثلثات ونتيجة إقليدس`,
+    formula: `حالات التشابه: (١) زاويتان متساويتان (AA) • (٢) تناسب ٣ أضلاع (SSS) • (٣) زاوية محصورة وتناسب ضلعيها (SAS).<br>في المثلث القائم (<span class="math-expr">${seg('أ د')} ⊥ ${seg('ب جـ')}</span>):<br><span class="math-expr">أ ب${sup('٢')} = ب د × ب جـ</span>  ،  <span class="math-expr">أ د${sup('٢')} = ب د × د جـ</span>  ،  <span class="math-expr">أ د × ب جـ = أ ب × أ جـ</span>`,
+    example: `<strong>مثال:</strong> في مثلث قائم أطوال ضلعي القائمة <span class="math-expr">٦ ، ٨</span> والوتر <span class="math-expr">١٠</span>: طول العمود <span class="math-expr">أ د = ${frac('٦ × ٨', '١٠')} = ٤,٨</span> سم.`,
+    tip: `عند كتابة تشابه مثلثين، الترتيب الدقيق للرؤوس المتناظرة هو مفتاح استخراج التناسب الصحيح.`
+  },
+  {
+    id: `f_geo_3`,
+    unit: `geo`,
+    title: `المستقيم الموازي ونظرية تاليس`,
+    formula: `• إذا وازى مستقيم أحد أضلاع مثلث: قسم الضلعين الآخرين إلى قطع متناسبة وشابه المثلث الناتج الأصلي.<br>• نظرية تاليس العامة: الأجزاء المحصورة بين مستقيمات متوازية على أي قاطعين أطوالها متناسبة.`,
+    example: `<strong>مثال:</strong> في تاليس الخاصة، إذا تساوت أجزاء أحد القاطعين تساوت أجزاء أي قاطع آخر.`,
+    tip: `في مسائل التوازي داخل المثلث: التناسب مع القاعدتين المتوازيتين يستخدم الضلع الكامل (<span class="math-expr">${frac('أ د', 'أ ب')} = ${frac('د هـ', 'ب جـ')}</span>) وليس جزءاً إلى جزء!`
+  },
+  {
+    id: `f_geo_4`,
+    unit: `geo`,
+    title: `منصف الزاوية وطول المنصف`,
+    formula: `• تناسب المنصف (داخلياً أو خارجياً): <span class="math-expr">${frac('ب د', 'د جـ')} = ${frac('أ ب', 'أ جـ')}</span><br>• طول المنصف الداخلي: <span class="math-expr">أ د = ${sqrtHtml('أ ب × أ جـ − ب د × د جـ')}</span><br>• طول المنصف الخارجي: <span class="math-expr">أ د = ${sqrtHtml('ب د × د جـ − أ ب × أ جـ')}</span>`,
+    example: `<strong>مثال:</strong> منصف الزاوية الخارجة لمثلث متساوي الساقين عند الرأس يوازي القاعدة!`,
+    tip: `المنصفان الداخلي والخارجي لنفس زاوية الرأس متعامدان دائماً (الزاوية بينهما <span class="math-expr">= ٩٠°</span>).`
+  },
+  {
+    id: `f_geo_5`,
+    unit: `geo`,
+    title: `تناسب الأوتار والقواطع والمماس في الدائرة`,
+    formula: `• وتران متقاطعان داخلاً: <span class="math-expr">هـ أ × هـ ب = هـ جـ × هـ د</span><br>• قاطعان من نقطة خارجها: <span class="math-expr">هـ أ × هـ ب = هـ جـ × هـ د</span><br>• مماس وقاطع من نقطة خارجها: <span class="math-expr">(هـ أ)${sup('٢')} = هـ ب × هـ جـ</span>`,
+    example: `<strong>مثال:</strong> قاطع يمر بالمركز من نقطة خارجية: <span class="math-expr">هـ ب = هـ م − نق</span>، و <span class="math-expr">هـ جـ = هـ م + نق</span>.`,
+    tip: `ابدأ دائماً كل القياسات من نقطة التقاطع <span class="math-expr">هـ</span> إلى نقطتي تقاطع المستقيم مع الدائرة.`
+  },
+  {
+    id: `f_geo_6`,
+    unit: `geo`,
+    title: `قوة نقطة بالنسبة لدائرة`,
+    formula: `<span class="math-expr">ق${sub('م')}(أ) = (أ م)${sup('٢')} − نق${sup('٢')}</span><br>• <span class="math-expr">ق${sub('م')}(أ) &gt; ٠</span>: النقطة خارج الدائرة وطول المماس <span class="math-expr">= ${sqrtHtml('ق' + sub('م') + '(أ)')}</span><br>• <span class="math-expr">ق${sub('م')}(أ) = ٠</span>: النقطة على الدائرة<br>• <span class="math-expr">ق${sub('م')}(أ) &lt; ٠</span>: النقطة داخل الدائرة`,
+    example: `<strong>مثال:</strong> إذا كان <span class="math-expr">نق = ٦</span> سم و <span class="math-expr">ق${sub('م')}(أ) = −١١</span>، فإن <span class="math-expr">أ م${sup('٢')} = ٣٦ − ١١ = ٢٥ ⇐ أ م = ٥</span> سم.`,
+    tip: `قوة النقطة خارج الدائرة تساوي مربع طول المماس المرسوم منها للدائرة.`
+  }
+];
+
+// ============================================================
+// 4. Geometry SVG Diagrams for Questions
+// ============================================================
+function getQuestionDiagramSvg(type) {
+  if (type === `parallel_tri`) {
+    return `<svg viewBox="0 0 220 180" aria-hidden="true">
+      <polygon points="110,18 30,158 190,158" fill="none" stroke="var(--on-surface)" stroke-width="2"/>
+      <line x1="78" y1="74" x2="142" y2="74" stroke="var(--primary)" stroke-width="2.5"/>
+      <text x="110" y="13" text-anchor="middle" font-size="13" font-weight="700" fill="var(--on-surface)">أ</text>
+      <text x="20" y="168" text-anchor="middle" font-size="13" font-weight="700" fill="var(--on-surface)">ب</text>
+      <text x="200" y="168" text-anchor="middle" font-size="13" font-weight="700" fill="var(--on-surface)">جـ</text>
+      <text x="66" y="75" text-anchor="middle" font-size="13" font-weight="700" fill="var(--primary)">د</text>
+      <text x="154" y="75" text-anchor="middle" font-size="13" font-weight="700" fill="var(--primary)">هـ</text>
+      <text x="84" y="45" font-size="11" fill="var(--secondary)">٤</text>
+      <text x="48" y="118" font-size="11" fill="var(--secondary)">٦</text>
+      <text x="110" y="68" text-anchor="middle" font-size="11" fill="var(--primary)">٦</text>
+    </svg>`;
+  }
+  if (type === `euclid`) {
+    return `<svg viewBox="0 0 240 165" aria-hidden="true">
+      <polygon points="88,26 24,136 216,136" fill="none" stroke="var(--on-surface)" stroke-width="2"/>
+      <line x1="88" y1="26" x2="88" y2="136" stroke="var(--primary)" stroke-width="2.2" stroke-dasharray="4 3"/>
+      <rect x="88" y="124" width="12" height="12" fill="none" stroke="var(--primary)" stroke-width="1.5"/>
+      <text x="88" y="18" text-anchor="middle" font-size="13" font-weight="700" fill="var(--on-surface)">أ</text>
+      <text x="16" y="144" text-anchor="middle" font-size="13" font-weight="700" fill="var(--on-surface)">ب</text>
+      <text x="224" y="144" text-anchor="middle" font-size="13" font-weight="700" fill="var(--on-surface)">جـ</text>
+      <text x="88" y="153" text-anchor="middle" font-size="13" font-weight="700" fill="var(--primary)">د</text>
+      <text x="56" y="130" text-anchor="middle" font-size="11" fill="var(--secondary)">٤</text>
+      <text x="152" y="130" text-anchor="middle" font-size="11" fill="var(--secondary)">٩</text>
+    </svg>`;
+  }
+  if (type === `chords_in`) {
+    return `<svg viewBox="0 0 200 180" aria-hidden="true">
+      <circle cx="100" cy="90" r="72" fill="none" stroke="var(--on-surface)" stroke-width="2"/>
+      <line x1="42" y1="48" x2="158" y2="132" stroke="var(--primary)" stroke-width="2"/>
+      <line x1="56" y1="146" x2="146" y2="34" stroke="var(--secondary)" stroke-width="2"/>
+      <circle cx="100" cy="90" r="3.5" fill="var(--error)"/>
+      <text x="34" y="46" font-size="13" font-weight="700" fill="var(--on-surface)">أ</text>
+      <text x="166" y="140" font-size="13" font-weight="700" fill="var(--on-surface)">ب</text>
+      <text x="152" y="32" font-size="13" font-weight="700" fill="var(--on-surface)">جـ</text>
+      <text x="46" y="156" font-size="13" font-weight="700" fill="var(--on-surface)">د</text>
+      <text x="108" y="88" font-size="12" font-weight="700" fill="var(--error)">هـ</text>
+    </svg>`;
+  }
+  if (type === `tangent_secant`) {
+    return `<svg viewBox="0 0 240 170" aria-hidden="true">
+      <circle cx="145" cy="92" r="56" fill="none" stroke="var(--on-surface)" stroke-width="2"/>
+      <line x1="22" y1="138" x2="132" y2="38" stroke="var(--primary)" stroke-width="2"/>
+      <line x1="22" y1="138" x2="199" y2="106" stroke="var(--secondary)" stroke-width="2"/>
+      <circle cx="22" cy="138" r="3.5" fill="var(--error)"/>
+      <circle cx="117" cy="51" r="3" fill="var(--primary)"/>
+      <circle cx="92" cy="125" r="3" fill="var(--secondary)"/>
+      <circle cx="195" cy="107" r="3" fill="var(--secondary)"/>
+      <text x="14" y="152" font-size="13" font-weight="700" fill="var(--error)">هـ</text>
+      <text x="115" y="42" font-size="13" font-weight="700" fill="var(--primary)">أ</text>
+      <text x="88" y="142" font-size="13" font-weight="700" fill="var(--secondary)">ب</text>
+      <text x="206" y="114" font-size="13" font-weight="700" fill="var(--secondary)">جـ</text>
+    </svg>`;
+  }
+  return ``;
+}
+
+// ============================================================
+// 5. Application State & Persistence (notebookAppApi)
+// ============================================================
+let appState = {
+  points: 0,
+  streak: 0,
+  bestStreak: 0,
+  masteredIds: [],
+  wrongIds: [],
+  savedFormulas: [],
+  activeView: `arena`,
+  selectedUnit: `all`,
+  selectedMode: `practice`
+};
+
+let roundState = {
+  questions: [],
+  index: 0,
+  answered: false,
+  selectedOption: null,
+  scoreCount: 0,
+  roundPoints: 0,
+  unitStats: {
+    algebra: { correct: 0, total: 0 },
+    trig: { correct: 0, total: 0 },
+    geo: { correct: 0, total: 0 }
+  },
+  hintUsed: false,
+  eliminatedOptions: [],
+  lifelinesLeft: 2,
+  timerSeconds: 30,
+  timerId: null,
+  isMistakesRound: false
+};
+
+let currentFormulaFilter = `all`;
+let currentLab = `quad`;
+
+async function saveState() {
+  try {
+    if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+      await window.notebookAppApi.setAppState(appState);
+    }
+  } catch (e) {
+    // Non-fatal fallback
+  }
+}
+
+async function initApp() {
+  try {
+    if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+      const saved = await window.notebookAppApi.getAppState();
+      if (saved && typeof saved === `object`) {
+        appState = Object.assign({}, appState, saved);
+      }
+    }
+  } catch (e) {
+    // Ignore load error and use defaults
+  }
+
+  syncSelectionButtons();
+  updateKpiBar();
+  startNewRound();
+  renderFormulas();
+  renderMistakesBank();
+  updateQuadLab();
+  updateAngleLab();
+  updatePowerLab();
+
+  if (appState.activeView && appState.activeView !== `arena`) {
+    switchView(appState.activeView, true);
+  }
+
+  if (window.lucide && typeof window.lucide.createIcons === `function`) {
+    window.lucide.createIcons();
+  }
+
+  if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+    window.notebookAppApi.notifyAppReady();
+  }
+}
+
+// ============================================================
+// 6. Navigation & KPI Updates
+// ============================================================
+function switchView(viewName, skipSave) {
+  appState.activeView = viewName;
+  const views = [`arena`, `formulas`, `labs`, `review`];
+  views.forEach(function(v) {
+    const panel = document.getElementById(`view-${v}`);
+    const tab = document.getElementById(`tab-${v}`);
+    if (panel) panel.classList.toggle(`is-visible`, v === viewName);
+    if (tab) tab.classList.toggle(`is-active`, v === viewName);
+  });
+  if (viewName === `review`) renderMistakesBank();
+  if (viewName === `formulas`) renderFormulas();
+  if (!skipSave) saveState();
+}
+
+function getRankTitle(pts) {
+  if (pts >= 500) return `عبقري الأول الثانوي`;
+  if (pts >= 250) return `بطل الرياضيات المتميز`;
+  if (pts >= 100) return `متدرب متفوق`;
+  return `مستكشف الرياضيات`;
+}
+
+function updateKpiBar() {
+  const elPts = document.getElementById(`kpi-points`);
+  const elRank = document.getElementById(`kpi-rank`);
+  const elStreak = document.getElementById(`kpi-streak`);
+  const elBest = document.getElementById(`kpi-best-streak`);
+  const elMastery = document.getElementById(`kpi-mastery`);
+  const elBar = document.getElementById(`kpi-mastery-bar`);
+  const elBreakdown = document.getElementById(`unit-breakdown-label`);
+  const elReviewBadge = document.getElementById(`badge-review-count`);
+
+  const totalQ = QUESTIONS.length;
+  const masteredCount = appState.masteredIds.length;
+  const pct = Math.round((masteredCount / totalQ) * 100);
+
+  if (elPts) elPts.textContent = `${toAr(appState.points)} نقطة`;
+  if (elRank) elRank.textContent = `المستوى: ${getRankTitle(appState.points)}`;
+  if (elStreak) elStreak.textContent = `${toAr(appState.streak)} متتالية`;
+  if (elBest) elBest.textContent = `أعلى سلسلة: ${toAr(appState.bestStreak)}`;
+  if (elMastery) elMastery.textContent = `${toAr(pct)}٪ (${toAr(masteredCount)} من ${toAr(totalQ)})`;
+  if (elBar) elBar.style.width = `${pct}%`;
+
+  const algPct = Math.round((appState.masteredIds.filter(id => id.startsWith(`alg_`)).length / 10) * 100);
+  const trigPct = Math.round((appState.masteredIds.filter(id => id.startsWith(`trig_`)).length / 10) * 100);
+  const geoPct = Math.round((appState.masteredIds.filter(id => id.startsWith(`geo_`)).length / 10) * 100);
+
+  if (elBreakdown) {
+    elBreakdown.textContent = `الجبر ${toAr(algPct)}٪ • المثلثات ${toAr(trigPct)}٪ • الهندسة ${toAr(geoPct)}٪`;
+  }
+  if (elReviewBadge) {
+    elReviewBadge.textContent = toAr(appState.wrongIds.length + appState.savedFormulas.length);
+  }
+}
+
+function handleResetProgress(btn) {
+  if (!btn) return;
+  if (btn.dataset.armed !== `true`) {
+    btn.dataset.armed = `true`;
+    const span = btn.querySelector(`span`);
+    if (span) span.textContent = `تأكيد إعادة الضبط؟`;
+    setTimeout(function() {
+      if (btn.dataset.armed === `true`) {
+        btn.dataset.armed = `false`;
+        const s = btn.querySelector(`span`);
+        if (s) s.textContent = `إعادة ضبط التقدم`;
+      }
+    }, 4000);
+    return;
+  }
+  btn.dataset.armed = `false`;
+  const span = btn.querySelector(`span`);
+  if (span) span.textContent = `إعادة ضبط التقدم`;
+
+  appState.points = 0;
+  appState.streak = 0;
+  appState.bestStreak = 0;
+  appState.masteredIds = [];
+  appState.wrongIds = [];
+  appState.savedFormulas = [];
+  saveState();
+  updateKpiBar();
+  renderFormulas();
+  renderMistakesBank();
+  startNewRound();
+}
+
+// ============================================================
+// 7. Quiz Arena Logic
+// ============================================================
+function syncSelectionButtons() {
+  document.querySelectorAll(`#unit-selector .choice-pill`).forEach(function(btn) {
+    btn.classList.toggle(`is-selected`, btn.dataset.unit === appState.selectedUnit);
+  });
+  document.querySelectorAll(`#mode-selector .choice-pill`).forEach(function(btn) {
+    btn.classList.toggle(`is-selected`, btn.dataset.mode === appState.selectedMode);
+  });
+}
+
+function selectUnit(unit) {
+  appState.selectedUnit = unit;
+  syncSelectionButtons();
+  saveState();
+  startNewRound();
+}
+
+function selectMode(mode) {
+  appState.selectedMode = mode;
+  syncSelectionButtons();
+  saveState();
+  startNewRound();
+}
+
+function shuffleArray(arr) {
+  const copy = arr.slice();
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = copy[i];
+    copy[i] = copy[j];
+    copy[j] = tmp;
+  }
+  return copy;
+}
+
+function stopTimer() {
+  if (roundState.timerId) {
+    clearInterval(roundState.timerId);
+    roundState.timerId = null;
+  }
+}
+
+function startNewRound() {
+  stopTimer();
+  let pool = [];
+  if (appState.selectedMode === `exam`) {
+    const alg = shuffleArray(QUESTIONS.filter(q => q.unit === `algebra`)).slice(0, 5);
+    const trig = shuffleArray(QUESTIONS.filter(q => q.unit === `trig`)).slice(0, 5);
+    const geo = shuffleArray(QUESTIONS.filter(q => q.unit === `geo`)).slice(0, 5);
+    pool = shuffleArray(alg.concat(trig, geo));
+  } else if (appState.selectedUnit === `all`) {
+    pool = shuffleArray(QUESTIONS);
+  } else {
+    pool = shuffleArray(QUESTIONS.filter(q => q.unit === appState.selectedUnit));
+  }
+
+  roundState = {
+    questions: pool,
+    index: 0,
+    answered: false,
+    selectedOption: null,
+    scoreCount: 0,
+    roundPoints: 0,
+    unitStats: {
+      algebra: { correct: 0, total: 0 },
+      trig: { correct: 0, total: 0 },
+      geo: { correct: 0, total: 0 }
+    },
+    hintUsed: false,
+    eliminatedOptions: [],
+    lifelinesLeft: 2,
+    timerSeconds: 30,
+    timerId: null,
+    isMistakesRound: false
+  };
+
+  renderCurrentQuestion();
+}
+
+function startMistakesRound() {
+  if (appState.wrongIds.length === 0) return;
+  stopTimer();
+  const pool = shuffleArray(QUESTIONS.filter(q => appState.wrongIds.includes(q.id)));
+  if (pool.length === 0) return;
+
+  roundState = {
+    questions: pool,
+    index: 0,
+    answered: false,
+    selectedOption: null,
+    scoreCount: 0,
+    roundPoints: 0,
+    unitStats: {
+      algebra: { correct: 0, total: 0 },
+      trig: { correct: 0, total: 0 },
+      geo: { correct: 0, total: 0 }
+    },
+    hintUsed: false,
+    eliminatedOptions: [],
+    lifelinesLeft: 2,
+    timerSeconds: 30,
+    timerId: null,
+    isMistakesRound: true
+  };
+
+  switchView(`arena`);
+  renderCurrentQuestion();
+}
+
+function startQuestionTimer() {
+  stopTimer();
+  if (appState.selectedMode !== `timed` || roundState.answered) return;
+  roundState.timerSeconds = 30;
+  roundState.timerId = setInterval(function() {
+    roundState.timerSeconds -= 1;
+    const pill = document.getElementById(`timer-pill`);
+    if (pill) {
+      pill.textContent = `${toAr(Math.max(0, roundState.timerSeconds))} ثانية`;
+      pill.classList.toggle(`is-urgent`, roundState.timerSeconds <= 8);
+    }
+    if (roundState.timerSeconds <= 0) {
+      stopTimer();
+      handleTimeOut();
+    }
+  }, 1000);
+}
+
+function handleTimeOut() {
+  if (roundState.answered) return;
+  submitAnswer(-1);
+}
+
+function renderCurrentQuestion() {
+  const stage = document.getElementById(`quiz-stage`);
+  if (!stage) return;
+
+  if (roundState.index >= roundState.questions.length) {
+    renderRoundSummary(stage);
+    return;
+  }
+
+  const q = roundState.questions[roundState.index];
+  const letters = [`أ`, `ب`, `جـ`, `د`];
+  const hasDiagram = Boolean(q.diagram);
+  const diagramSvg = hasDiagram ? getQuestionDiagramSvg(q.diagram) : ``;
+
+  const timerHtml = appState.selectedMode === `timed`
+    ? `<span class="timer-pill" id="timer-pill">${toAr(roundState.timerSeconds)} ثانية</span>`
+    : ``;
+
+  const optionsHtml = q.options.map(function(opt, idx) {
+    const isElim = roundState.eliminatedOptions.includes(idx);
+    let cls = `option-btn`;
+    if (isElim) cls += ` is-eliminated`;
+    if (roundState.answered) {
+      if (idx === q.correct) cls += ` is-correct`;
+      else if (idx === roundState.selectedOption) cls += ` is-wrong`;
+    }
+    const disabledAttr = (roundState.answered || isElim) ? `disabled` : ``;
+    return `
+      <button type="button" class="${cls}" ${disabledAttr} onclick="submitAnswer(${idx})">
+        <span class="option-letter">${letters[idx]}</span>
+        <span>${opt}</span>
+      </button>
+    `;
+  }).join(``);
+
+  let feedbackHtml = ``;
+  if (roundState.answered) {
+    const isCorrect = roundState.selectedOption === q.correct;
+    const statusCls = isCorrect ? `is-correct` : `is-wrong`;
+    const statusTitle = isCorrect
+      ? `إجابة صحيحة! أحسنت التفكير.`
+      : (roundState.selectedOption === -1 ? `انتهى الوقت المحدد للسؤال.` : `إجابة غير موفقة — راجع خطوات الحل التالية:`);
+    const nextLabel = (roundState.index + 1 >= roundState.questions.length) ? `عرض تقرير الجولة` : `السؤال التالي`;
+
+    feedbackHtml = `
+      <div class="solution-panel ${statusCls}">
+        <p class="solution-title">
+          <i data-lucide="${isCorrect ? 'check-circle-2' : 'alert-circle'}" aria-hidden="true"></i>
+          <span>${statusTitle}</span>
+        </p>
+        <p class="solution-steps"><strong>خطوات الحل:</strong> ${q.solution}</p>
+        <div class="solution-actions">
+          <span class="label">النتيجة الحالية في الجولة: ${toAr(roundState.scoreCount)} من ${toAr(roundState.index + 1)}</span>
+          <button type="button" class="btn btn-primary" onclick="nextQuestion()">
+            <span>${nextLabel}</span>
+            <i data-lucide="arrow-left" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  const hintHtml = roundState.hintUsed
+    ? `<div class="hint-box"><strong>تلميح القانون:</strong> ${q.hint}</div>`
+    : ``;
+
+  stage.innerHTML = `
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="tag tag-slate">سؤال ${toAr(roundState.index + 1)} من ${toAr(roundState.questions.length)}</span>
+        <span class="tag">${UNIT_NAMES[q.unit]} — ${q.lesson}</span>
+        <span class="tag ${q.level === 'متميز' ? 'tag-warn' : ''}">${q.level}</span>
+      </div>
+      ${timerHtml}
+    </div>
+
+    <div class="question-body-grid ${hasDiagram ? 'has-diagram' : ''}">
+      <p class="question-text">${q.question}</p>
+      ${hasDiagram ? `<div class="diagram-box">${diagramSvg}</div>` : ``}
+    </div>
+
+    ${hintHtml}
+
+    <div class="lifelines-bar">
+      <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm);">
+        <button type="button" class="btn btn-sm btn-secondary" ${roundState.answered || roundState.hintUsed ? 'disabled' : ''} onclick="useHint()">
+          <i data-lucide="lightbulb" aria-hidden="true"></i>
+          <span>تلميح القانون</span>
+        </button>
+        <button type="button" class="btn btn-sm btn-secondary" ${roundState.answered || roundState.lifelinesLeft <= 0 || roundState.eliminatedOptions.length > 0 ? 'disabled' : ''} onclick="useFiftyFifty()">
+          <i data-lucide="scissors" aria-hidden="true"></i>
+          <span>حذف إجابتين (متبقي ${toAr(roundState.lifelinesLeft)})</span>
+        </button>
+      </div>
+      <span class="label">نقاط الجولة: ${toAr(roundState.roundPoints)}</span>
+    </div>
+
+    <div class="options-grid">
+      ${optionsHtml}
+    </div>
+
+    ${feedbackHtml}
+  `;
+
+  if (window.lucide && typeof window.lucide.createIcons === `function`) {
+    window.lucide.createIcons();
+  }
+
+  if (!roundState.answered && appState.selectedMode === `timed`) {
+    startQuestionTimer();
+  }
+}
+
+function useHint() {
+  if (roundState.answered || roundState.hintUsed) return;
+  roundState.hintUsed = true;
+  renderCurrentQuestion();
+}
+
+function useFiftyFifty() {
+  if (roundState.answered || roundState.lifelinesLeft <= 0 || roundState.eliminatedOptions.length > 0) return;
+  const q = roundState.questions[roundState.index];
+  const wrongIndices = [0, 1, 2, 3].filter(idx => idx !== q.correct);
+  const shuffled = shuffleArray(wrongIndices).slice(0, 2);
+  roundState.eliminatedOptions = shuffled;
+  roundState.lifelinesLeft -= 1;
+  renderCurrentQuestion();
+}
+
+function submitAnswer(optIdx) {
+  if (roundState.answered) return;
+  stopTimer();
+
+  const q = roundState.questions[roundState.index];
+  roundState.answered = true;
+  roundState.selectedOption = optIdx;
+  roundState.unitStats[q.unit].total += 1;
+
+  if (optIdx === q.correct) {
+    roundState.scoreCount += 1;
+    roundState.unitStats[q.unit].correct += 1;
+
+    let earned = appState.selectedMode === `timed` ? 20 : 10;
+    if (appState.selectedMode === `timed` && roundState.timerSeconds >= 18) earned += 5;
+    if (roundState.hintUsed) earned = Math.max(5, earned - 3);
+
+    appState.points += earned;
+    roundState.roundPoints += earned;
+    appState.streak += 1;
+    if (appState.streak > appState.bestStreak) appState.bestStreak = appState.streak;
+
+    if (!appState.masteredIds.includes(q.id)) {
+      appState.masteredIds.push(q.id);
+    }
+    appState.wrongIds = appState.wrongIds.filter(id => id !== q.id);
+  } else {
+    appState.streak = 0;
+    if (!appState.wrongIds.includes(q.id)) {
+      appState.wrongIds.push(q.id);
+    }
+  }
+
+  saveState();
+  updateKpiBar();
+  renderCurrentQuestion();
+}
+
+function nextQuestion() {
+  roundState.index += 1;
+  roundState.answered = false;
+  roundState.selectedOption = null;
+  roundState.hintUsed = false;
+  roundState.eliminatedOptions = [];
+  roundState.timerSeconds = 30;
+  renderCurrentQuestion();
+}
+
+function renderRoundSummary(stage) {
+  stopTimer();
+  const total = roundState.questions.length;
+  const pct = total > 0 ? Math.round((roundState.scoreCount / total) * 100) : 0;
+
+  let verdict = `أداء ممتاز ومتمكن! استمر على هذا المستوى الرائع.`;
+  if (pct < 50) verdict = `بداية جيدة؛ ننصح بمراجعة بطاقات القوانين وبنك الأخطاء ثم المحاولة مجدداً.`;
+  else if (pct < 80) verdict = `مستوى جيد جداً! خطوة قصيرة تفصلك عن الإتقان الكامل.`;
+
+  const unitRows = [`algebra`, `trig`, `geo`].map(function(u) {
+    const st = roundState.unitStats[u];
+    if (st.total === 0) return ``;
+    const upct = Math.round((st.correct / st.total) * 100);
+    return `
+      <div class="summary-stat-box">
+        <span class="label">${UNIT_NAMES[u]}</span>
+        <div class="kpi-value" style="font-size: 1.3rem;">${toAr(st.correct)} / ${toAr(st.total)}</div>
+        <span class="caption-sage">نسبة الدقة: ${toAr(upct)}٪</span>
+      </div>
+    `;
+  }).join(``);
+
+  stage.innerHTML = `
+    <div class="summary-card">
+      <div>
+        <span class="tag tag-slate">انتهت الجولة بنجاح</span>
+        <h2 class="headline" style="font-size: var(--headline-size); margin-top: var(--space-sm);">
+          نتيجتك: <strong>${toAr(roundState.scoreCount)} من ${toAr(total)}</strong> (${toAr(pct)}٪)
+        </h2>
+        <p class="caption-sage">${verdict}</p>
+      </div>
+
+      <div class="summary-stats">
+        <div class="summary-stat-box">
+          <span class="label">نقاط هذه الجولة</span>
+          <div class="kpi-value">+${toAr(roundState.roundPoints)}</div>
+          <span class="caption-sage">أُضيفت لرصيدك</span>
+        </div>
+        ${unitRows}
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: var(--space-md);">
+        <button type="button" class="btn btn-primary" onclick="startNewRound()">
+          <i data-lucide="rotate-cw" aria-hidden="true"></i>
+          <span>بدء جولة جديدة</span>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="switchView('formulas')">
+          <i data-lucide="book-open" aria-hidden="true"></i>
+          <span>مراجعة ملخص القوانين</span>
+        </button>
+        ${appState.wrongIds.length > 0 ? `
+          <button type="button" class="btn btn-subtle" onclick="switchView('review')">
+            <i data-lucide="alert-triangle" aria-hidden="true"></i>
+            <span>مراجعة الأخطاء (${toAr(appState.wrongIds.length)})</span>
+          </button>
+        ` : ``}
+      </div>
+    </div>
+  `;
+
+  if (window.lucide && typeof window.lucide.createIcons === `function`) {
+    window.lucide.createIcons();
+  }
+}
+
+// Keyboard shortcuts (1-4 for options, Enter for next)
+document.addEventListener(`keydown`, function(e) {
+  if (appState.activeView !== `arena`) return;
+  if (e.target && (e.target.tagName === `INPUT` || e.target.tagName === `TEXTAREA`)) return;
+  if (roundState.index >= roundState.questions.length) return;
+
+  if (!roundState.answered && [`1`, `2`, `3`, `4`].includes(e.key)) {
+    const idx = Number(e.key) - 1;
+    if (!roundState.eliminatedOptions.includes(idx)) {
+      submitAnswer(idx);
+    }
+  } else if (roundState.answered && e.key === `Enter`) {
+    e.preventDefault();
+    nextQuestion();
+  }
+});
+
+// ============================================================
+// 8. Formula & Theorem Cards Section
+// ============================================================
+function setFormulaFilter(filter) {
+  currentFormulaFilter = filter;
+  document.querySelectorAll(`#formula-filter-pills button`).forEach(function(btn) {
+    const active = btn.dataset.ffilter === filter;
+    btn.classList.toggle(`btn-primary`, active);
+    btn.classList.toggle(`btn-secondary`, !active && btn.dataset.ffilter !== `saved`);
+    btn.classList.toggle(`btn-subtle`, !active && btn.dataset.ffilter === `saved`);
+  });
+  renderFormulas();
+}
+
+function toggleSaveFormula(id) {
+  if (appState.savedFormulas.includes(id)) {
+    appState.savedFormulas = appState.savedFormulas.filter(x => x !== id);
+  } else {
+    appState.savedFormulas.push(id);
+  }
+  saveState();
+  updateKpiBar();
+  renderFormulas();
+}
+
+function toggleFormulaDetails(id) {
+  const el = document.getElementById(`fdetails-${id}`);
+  const btn = document.getElementById(`fbtn-${id}`);
+  if (!el || !btn) return;
+  const open = el.classList.toggle(`is-open`);
+  btn.textContent = open ? `إخفاء المثال والتنبيه` : `عرض مثال تطبيقي ومفتاح الحل`;
+}
+
+function renderFormulas() {
+  const grid = document.getElementById(`formula-cards-grid`);
+  if (!grid) return;
+
+  const searchEl = document.getElementById(`formula-search`);
+  const query = searchEl ? searchEl.value.trim() : ``;
+
+  const filtered = FORMULAS.filter(function(f) {
+    if (currentFormulaFilter === `saved` && !appState.savedFormulas.includes(f.id)) return false;
+    if (currentFormulaFilter !== `all` && currentFormulaFilter !== `saved` && f.unit !== currentFormulaFilter) return false;
+    if (query) {
+      const plain = (f.title + ` ` + f.formula + ` ` + f.example + ` ` + f.tip).replace(/<[^>]+>/g, ``);
+      if (!plain.includes(query)) return false;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="panel empty-state" style="grid-column: 1 / -1;">
+        <p class="question-text">لا توجد بطاقات قوانين مطابقة لهذا البحث أو التصفية.</p>
+        <button type="button" class="btn btn-secondary" onclick="setFormulaFilter('all')">عرض جميع القوانين</button>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(function(f) {
+    const isSaved = appState.savedFormulas.includes(f.id);
+    return `
+      <article class="panel formula-card">
+        <div style="display: grid; gap: var(--space-sm);">
+          <div class="formula-card-top">
+            <div>
+              <span class="tag">${UNIT_NAMES[f.unit]}</span>
+              <h3 class="formula-title" style="margin-top: var(--space-xs);">${f.title}</h3>
+            </div>
+            <button type="button" class="bookmark-btn ${isSaved ? 'is-saved' : ''}" aria-label="حفظ القانون للمراجعة" onclick="toggleSaveFormula('${f.id}')">
+              <i data-lucide="${isSaved ? 'bookmark-check' : 'bookmark'}" aria-hidden="true"></i>
+            </button>
+          </div>
+
+          <div class="formula-box">${f.formula}</div>
+
+          <div class="formula-details" id="fdetails-${f.id}">
+            <div>${f.example}</div>
+            <div style="color: var(--warning); font-weight: 600;">${f.tip}</div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-sm btn-secondary" id="fbtn-${f.id}" onclick="toggleFormulaDetails('${f.id}')">
+          عرض مثال تطبيقي ومفتاح الحل
+        </button>
+      </article>
+    `;
+  }).join(``);
+
+  if (window.lucide && typeof window.lucide.createIcons === `function`) {
+    window.lucide.createIcons();
+  }
+}
+
+// ============================================================
+// 9. Interactive Concept Labs
+// ============================================================
+function switchLab(labId) {
+  currentLab = labId;
+  [`quad`, `unitcircle`, `power`].forEach(function(id) {
+    const el = document.getElementById(`lab-${id}`);
+    if (el) el.style.display = (id === labId) ? `grid` : `none`;
+  });
+  document.querySelectorAll(`#labs-nav button`).forEach(function(btn) {
+    const active = btn.dataset.lab === labId;
+    btn.classList.toggle(`btn-primary`, active);
+    btn.classList.toggle(`btn-secondary`, !active);
+  });
+}
+
+// Lab 1: Quadratic
+function setQuadPreset(a, b, c) {
+  const sA = document.getElementById(`slider-qa`);
+  const sB = document.getElementById(`slider-qb`);
+  const sC = document.getElementById(`slider-qc`);
+  if (sA) sA.value = a;
+  if (sB) sB.value = b;
+  if (sC) sC.value = c;
+  updateQuadLab();
+}
+
+function updateQuadLab() {
+  const sA = document.getElementById(`slider-qa`);
+  const sB = document.getElementById(`slider-qb`);
+  const sC = document.getElementById(`slider-qc`);
+  if (!sA || !sB || !sC) return;
+
+  let a = Number(sA.value);
+  if (a === 0) {
+    a = 1;
+    sA.value = 1;
+  }
+  const b = Number(sB.value);
+  const c = Number(sC.value);
+
+  const vA = document.getElementById(`val-qa`);
+  const vB = document.getElementById(`val-qb`);
+  const vC = document.getElementById(`val-qc`);
+  if (vA) vA.textContent = fmtNum(a);
+  if (vB) vB.textContent = fmtNum(b);
+  if (vC) vC.textContent = fmtNum(c);
+
+  const disc = b * b - 4 * a * c;
+  const sumR = (-b / a);
+  const prodR = (c / a);
+
+  let typeText = ``;
+  let rootsText = ``;
+  let r1 = null;
+  let r2 = null;
+
+  if (disc > 0) {
+    typeText = `جذران حقيقيان مختلفان (Δ &gt; ٠)`;
+    const sq = Math.sqrt(disc);
+    r1 = ((-b - sq) / (2 * a));
+    r2 = ((-b + sq) / (2 * a));
+    if (r1 > r2) { const t = r1; r1 = r2; r2 = t; }
+    rootsText = `الجذران ≈ ${fmtNum(Number(r1.toFixed(2)))} ، ${fmtNum(Number(r2.toFixed(2)))}`;
+  } else if (disc === 0) {
+    typeText = `جذران حقيقيان متساويان (Δ = ٠)`;
+    r1 = (-b / (2 * a));
+    rootsText = `الجذر المكرر = ${fmtNum(Number(r1.toFixed(2)))}`;
+  } else {
+    typeText = `جذران مركبان غير حقيقيين (Δ &lt; ٠)`;
+    const real = (-b / (2 * a)).toFixed(2);
+    const imag = (Math.sqrt(-disc) / Math.abs(2 * a)).toFixed(2);
+    rootsText = `الجذران ≈ ${fmtNum(Number(real))} ± ${toAr(imag)} ت`;
+  }
+
+  const bPart = b === 0 ? `` : (b > 0 ? ` + ${toAr(b)}س` : ` − ${toAr(Math.abs(b))}س`);
+  const cPart = c === 0 ? `` : (c > 0 ? ` + ${toAr(c)}` : ` − ${toAr(Math.abs(c))}`);
+  const aPart = a === 1 ? `س${sup('٢')}` : (a === -1 ? `−س${sup('٢')}` : `${fmtNum(a)}س${sup('٢')}`);
+
+  const out = document.getElementById(`quad-results`);
+  if (out) {
+    out.innerHTML = `
+      <div><strong>الدالة:</strong> <span class="math-expr">د(س) = ${aPart}${bPart}${cPart}</span></div>
+      <div><strong>المميز (Δ = ب${sup('٢')} − ٤أجـ):</strong> <span class="math-expr">${fmtNum(disc)}</span> ← <strong>${typeText}</strong></div>
+      <div>${rootsText}</div>
+      <div><strong>مجموع الجذرين:</strong> ${fmtNum(Number(sumR.toFixed(2)))} &nbsp;|&nbsp; <strong>حاصل الضرب:</strong> ${fmtNum(Number(prodR.toFixed(2)))}</div>
+    `;
+  }
+
+  // Draw SVG Parabola
+  const svgBox = document.getElementById(`quad-svg-container`);
+  if (svgBox) {
+    const w = 320;
+    const h = 240;
+    const cx = w / 2;
+    const cy = h / 2;
+    const scaleX = 24;
+    const scaleY = 14;
+    let pts = [];
+    for (let x = -6; x <= 6; x += 0.25) {
+      const y = a * x * x + b * x + c;
+      const sx = cx + x * scaleX;
+      const sy = cy - y * scaleY;
+      if (sy >= -20 && sy <= h + 20) {
+        pts.push(`${sx.toFixed(1)},${sy.toFixed(1)}`);
+      }
+    }
+    const rootDots = [];
+    if (disc > 0 && r1 !== null && r2 !== null) {
+      rootDots.push(`<circle cx="${(cx + r1 * scaleX).toFixed(1)}" cy="${cy}" r="5" fill="var(--error)"/>`);
+      rootDots.push(`<circle cx="${(cx + r2 * scaleX).toFixed(1)}" cy="${cy}" r="5" fill="var(--error)"/>`);
+    } else if (disc === 0 && r1 !== null) {
+      rootDots.push(`<circle cx="${(cx + r1 * scaleX).toFixed(1)}" cy="${cy}" r="5" fill="var(--positive)"/>`);
+    }
+    svgBox.innerHTML = `
+      <svg viewBox="0 0 ${w} ${h}" aria-hidden="true">
+        <line x1="16" y1="${cy}" x2="${w - 16}" y2="${cy}" stroke="var(--outline)" stroke-width="1.5"/>
+        <line x1="${cx}" y1="12" x2="${cx}" y2="${h - 12}" stroke="var(--outline)" stroke-width="1.5"/>
+        <polyline fill="none" stroke="var(--primary)" stroke-width="2.5" points="${pts.join(' ')}"/>
+        ${rootDots.join('')}
+        <text x="${w - 14}" y="${cy - 6}" font-size="11" fill="var(--on-surface-variant)">س</text>
+        <text x="${cx + 8}" y="20" font-size="11" fill="var(--on-surface-variant)">ص</text>
+      </svg>
+    `;
+  }
+
+  // Sign line explanation
+  const signBox = document.getElementById(`quad-sign-line`);
+  if (signBox) {
+    const sameSign = a > 0 ? `موجبة (+)` : `سالبة (−)`;
+    const oppSign = a > 0 ? `سالبة (−)` : `موجبة (+)`;
+    let desc = ``;
+    if (disc > 0) {
+      const r1Str = fmtNum(Number(r1.toFixed(2)));
+      const r2Str = fmtNum(Number(r2.toFixed(2)));
+      desc = `الدالة <strong>${oppSign}</strong> في الفترة <span class="math-expr">(${r1Str} ، ${r2Str})</span>، و<strong>${sameSign}</strong> في <span class="math-expr">ح − [${r1Str} ، ${r2Str}]</span>، وتساوي صفراً عند <span class="math-expr">{${r1Str} ، ${r2Str}}</span>.`;
+    } else if (disc === 0) {
+      const rStr = fmtNum(Number(r1.toFixed(2)));
+      desc = `الدالة <strong>${sameSign}</strong> لكل <span class="math-expr">س ∈ ح − {${rStr}}</span>، وتساوي صفراً عند <span class="math-expr">س = ${rStr}</span>.`;
+    } else {
+      desc = `الدالة <strong>${sameSign}</strong> دائماً لكل <span class="math-expr">س ∈ ح</span> (لا تقطع محور السينات).`;
+    }
+    signBox.innerHTML = `<span class="label">إشارة الدالة على خط الأعداد</span><div>${desc}</div>`;
+  }
+}
+
+// Lab 2: Unit Circle
+function setAnglePreset(deg) {
+  const sl = document.getElementById(`slider-angle`);
+  if (sl) sl.value = deg;
+  updateAngleLab();
+}
+
+function updateAngleLab() {
+  const sl = document.getElementById(`slider-angle`);
+  if (!sl) return;
+  const deg = Number(sl.value);
+  const valEl = document.getElementById(`val-angle`);
+  if (valEl) valEl.textContent = `${fmtNum(deg)}°`;
+
+  let pos = ((deg % 360) + 360) % 360;
+  let quad = `زاوية ربعية`;
+  if (pos > 0 && pos < 90) quad = `الربع الأول (الكل موجب)`;
+  else if (pos > 90 && pos < 180) quad = `الربع الثاني (جا و قتا موجبتان)`;
+  else if (pos > 180 && pos < 270) quad = `الربع الثالث (ظا و ظتا موجبتان)`;
+  else if (pos > 270 && pos < 360) quad = `الربع الرابع (جتا و قا موجبتان)`;
+
+  const rad = (deg * Math.PI) / 180;
+  const sinV = Math.sin(rad);
+  const cosV = Math.cos(rad);
+  const tanStr = Math.abs(cosV) < 0.0001 ? `غير معرّفة` : fmtNum(Number((sinV / cosV).toFixed(3)));
+  const radPi = (deg / 180).toFixed(2);
+
+  const out = document.getElementById(`angle-results`);
+  if (out) {
+    out.innerHTML = `
+      <div><strong>الموضع:</strong> ${quad}</div>
+      <div><strong>أصغر قياس موجب مكافئ:</strong> ${toAr(pos)}°</div>
+      <div><strong>القياس الدائري:</strong> ${fmtNum(Number(radPi))} π (≈ ${fmtNum(Number(rad.toFixed(3)))}${sup('د')})</div>
+      <div><strong>جتا θ =</strong> ${fmtNum(Number(cosV.toFixed(3)))} &nbsp;|&nbsp; <strong>جا θ =</strong> ${fmtNum(Number(sinV.toFixed(3)))} &nbsp;|&nbsp; <strong>ظا θ =</strong> ${tanStr}</div>
+    `;
+  }
+
+  const svgBox = document.getElementById(`angle-svg-container`);
+  if (svgBox) {
+    const cx = 130;
+    const cy = 130;
+    const r = 90;
+    const px = cx + r * cosV;
+    const py = cy - r * sinV;
+    svgBox.innerHTML = `
+      <svg viewBox="0 0 260 260" aria-hidden="true">
+        <line x1="16" y1="${cy}" x2="244" y2="${cy}" stroke="var(--outline)" stroke-width="1.5"/>
+        <line x1="${cx}" y1="16" x2="${cx}" y2="244" stroke="var(--outline)" stroke-width="1.5"/>
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--outline-variant)" stroke-width="2"/>
+        <line x1="${cx}" y1="${cy}" x2="${cx + r}" y2="${cy}" stroke="var(--secondary)" stroke-width="2"/>
+        <line x1="${cx}" y1="${cy}" x2="${px.toFixed(1)}" y2="${py.toFixed(1)}" stroke="var(--primary)" stroke-width="3"/>
+        <line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${px.toFixed(1)}" y2="${cy}" stroke="var(--data-3)" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="5.5" fill="var(--primary)"/>
+        <text x="195" y="45" font-size="11" fill="var(--on-surface-variant)">١ (الكل +)</text>
+        <text x="35" y="45" font-size="11" fill="var(--on-surface-variant)">٢ (جا +)</text>
+        <text x="35" y="220" font-size="11" fill="var(--on-surface-variant)">٣ (ظا +)</text>
+        <text x="195" y="220" font-size="11" fill="var(--on-surface-variant)">٤ (جتا +)</text>
+      </svg>
+    `;
+  }
+}
+
+// Lab 3: Power of a Point
+function setPowerPreset(r, d) {
+  const sR = document.getElementById(`slider-radius`);
+  const sD = document.getElementById(`slider-dist`);
+  if (sR) sR.value = r;
+  if (sD) sD.value = d;
+  updatePowerLab();
+}
+
+function updatePowerLab() {
+  const sR = document.getElementById(`slider-radius`);
+  const sD = document.getElementById(`slider-dist`);
+  if (!sR || !sD) return;
+  const r = Number(sR.value);
+  const d = Number(sD.value);
+
+  const vR = document.getElementById(`val-radius`);
+  const vD = document.getElementById(`val-dist`);
+  if (vR) vR.textContent = `${toAr(r)} سم`;
+  if (vD) vD.textContent = `${toAr(d)} سم`;
+
+  const power = d * d - r * r;
+  let posText = ``;
+  let extra = ``;
+  if (power > 0) {
+    posText = `خارج الدائرة (ق${sub('م')}(أ) &gt; ٠)`;
+    extra = `طول المماس المرسوم من أ <span class="math-expr">= ${sqrtHtml(toAr(power))} ≈ ${toAr(Math.sqrt(power).toFixed(2))}</span> سم.`;
+  } else if (power === 0) {
+    posText = `تقع على محيط الدائرة (ق${sub('م')}(أ) = ٠)`;
+    extra = `طول المماس <span class="math-expr">= ٠</span>.`;
+  } else {
+    posText = `داخل الدائرة (ق${sub('م')}(أ) &lt; ٠)`;
+    extra = `حاصل ضرب جزئي أي وتر يمر بـ أ <span class="math-expr">= |ق${sub('م')}(أ)| = ${toAr(Math.abs(power))}</span> سم${sup('٢')}.`;
+  }
+
+  const out = document.getElementById(`power-results`);
+  if (out) {
+    out.innerHTML = `
+      <div><strong>قوة النقطة ق${sub('م')}(أ) = أ م${sup('٢')} − نق${sup('٢')} =</strong> <span class="math-expr">${fmtNum(power)}</span></div>
+      <div><strong>موضع النقطة أ:</strong> ${posText}</div>
+      <div>${extra}</div>
+    `;
+  }
+
+  const svgBox = document.getElementById(`power-svg-container`);
+  if (svgBox) {
+    const cx = 195;
+    const cy = 120;
+    const scale = 10;
+    const sr = r * scale;
+    const ax = Math.max(24, cx - d * scale);
+    let tangentSvg = ``;
+    if (d > r) {
+      const sinAlpha = r / d;
+      const tLen = Math.sqrt(d * d - r * r) * scale;
+      const alpha = Math.asin(sinAlpha);
+      const tx = ax + tLen * Math.cos(alpha);
+      const ty = cy - tLen * Math.sin(alpha);
+      tangentSvg = `
+        <line x1="${ax}" y1="${cy}" x2="${tx.toFixed(1)}" y2="${ty.toFixed(1)}" stroke="var(--primary)" stroke-width="2.5"/>
+        <circle cx="${tx.toFixed(1)}" cy="${ty.toFixed(1)}" r="4" fill="var(--primary)"/>
+        <text x="${tx.toFixed(1)}" y="${(ty - 8).toFixed(1)}" font-size="12" font-weight="700" fill="var(--primary)">ب</text>
+      `;
+    }
+    svgBox.innerHTML = `
+      <svg viewBox="0 0 300 240" aria-hidden="true">
+        <circle cx="${cx}" cy="${cy}" r="${sr}" fill="none" stroke="var(--on-surface)" stroke-width="2"/>
+        <circle cx="${cx}" cy="${cy}" r="3.5" fill="var(--on-surface)"/>
+        <line x1="${ax}" y1="${cy}" x2="${cx}" y2="${cy}" stroke="var(--secondary)" stroke-width="2" stroke-dasharray="4 3"/>
+        ${tangentSvg}
+        <circle cx="${ax}" cy="${cy}" r="5" fill="var(--error)"/>
+        <text x="${cx + 8}" y="${cy + 14}" font-size="12" font-weight="700" fill="var(--on-surface)">م</text>
+        <text x="${ax - 14}" y="${cy + 16}" font-size="12" font-weight="700" fill="var(--error)">أ</text>
+      </svg>
+    `;
+  }
+}
+
+// ============================================================
+// 10. Mistakes & Bookmarks Review Section
+// ============================================================
+function markMistakeResolved(qId) {
+  appState.wrongIds = appState.wrongIds.filter(id => id !== qId);
+  if (!appState.masteredIds.includes(qId)) {
+    appState.masteredIds.push(qId);
+  }
+  saveState();
+  updateKpiBar();
+  renderMistakesBank();
+}
+
+function renderMistakesBank() {
+  const container = document.getElementById(`mistakes-container`);
+  const retryBtn = document.getElementById(`btn-retry-mistakes`);
+  if (!container) return;
+
+  const wrongQuestions = QUESTIONS.filter(q => appState.wrongIds.includes(q.id));
+  if (retryBtn) retryBtn.disabled = wrongQuestions.length === 0;
+
+  if (wrongQuestions.length === 0) {
+    container.innerHTML = `
+      <div class="panel empty-state">
+        <i data-lucide="check-circle-2" style="width: 36px; height: 36px; color: var(--positive);" aria-hidden="true"></i>
+        <h3 class="headline" style="font-size: var(--subhead-size);">سجل الأخطاء خالٍ تماماً!</h3>
+        <p class="caption-sage">لا توجد أسئلة متعثرة حالياً. واصل التحدي في ساحة اللعب أو راجع القوانين المحفوظة.</p>
+        <button type="button" class="btn btn-primary" onclick="switchView('arena')">العودة لساحة اللعب</button>
+      </div>
+    `;
+    if (window.lucide && typeof window.lucide.createIcons === `function`) window.lucide.createIcons();
+    return;
+  }
+
+  container.innerHTML = wrongQuestions.map(function(q) {
+    return `
+      <article class="panel mistake-card">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-sm);">
+          <span class="tag">${UNIT_NAMES[q.unit]} — ${q.lesson}</span>
+          <button type="button" class="btn btn-sm btn-subtle" onclick="markMistakeResolved('${q.id}')">
+            <i data-lucide="check" aria-hidden="true"></i>
+            <span>تم فهم السؤال وإتقانه</span>
+          </button>
+        </div>
+        <p class="question-text" style="font-size: 1.02rem;">${q.question}</p>
+        <div class="formula-box" style="background: var(--positive-container);">
+          <div><strong>الإجابة الصحيحة:</strong> ${q.options[q.correct]}</div>
+          <div style="margin-top: var(--space-xs);"><strong>الشرح:</strong> ${q.solution}</div>
+        </div>
+      </article>
+    `;
+  }).join(``);
+
+  if (window.lucide && typeof window.lucide.createIcons === `function`) {
+    window.lucide.createIcons();
+  }
+}
+
+window.addEventListener(`DOMContentLoaded`, initApp);
+</script>
+</body>
+</html>
